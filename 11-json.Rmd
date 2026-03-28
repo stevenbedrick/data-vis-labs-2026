@@ -154,7 +154,7 @@ j2
 Now that we've got useful names, let's go one level deeper (Inception-style) and turn our episodes into nested dataframes:
 
 ```{r}
-j3 <- j2 %>% mutate(episode=map(episode,enframe))
+j3 <- j2 %>% mutate(episode=purrr::map(episode,enframe))
 j3
 ```
 
@@ -175,7 +175,7 @@ j3
 I bet you can guess what comes next: that's right, we are going to `enframe` our utterances, and unnest!
 
 ```{r}
-j4 <- j3 %>% mutate(utterance=map(utterance,enframe))
+j4 <- j3 %>% mutate(utterance=purrr::map(utterance,enframe))
 j4
 ```
 
@@ -236,10 +236,10 @@ full_json_path <- here("data/lab11/teaearlgreyhotdataset.json")
 full_j <- read_json(full_json_path)
 full_j %>% enframe %>% 
   rename(episode.id=name, episode=value) %>% 
-  mutate(episode=map(episode,enframe)) %>% 
+  mutate(episode=purrr::map(episode,enframe)) %>% 
   unnest(episode) %>% 
   rename(utterance.id=name, utterance=value) %>% 
-  mutate(utterance=map(utterance,enframe)) %>% 
+  mutate(utterance=purrr::map(utterance,enframe)) %>% 
   unnest(utterance) %>% 
   pivot_wider(names_from=name, values_from=value) %>% 
   select(episode.id, utterance.id, char_type, type) %>% 
@@ -261,10 +261,10 @@ Note that these numbers don't match what is in the paper; I suspect that what we
 ```{r}
 full_j %>% enframe %>% 
   rename(episode.id=name, episode=value) %>% 
-  mutate(episode=map(episode,enframe)) %>% 
+  mutate(episode=purrr::map(episode,enframe)) %>% 
   unnest(episode) %>% 
   rename(utterance.id=name, utterance=value) %>% 
-  mutate(utterance=map(utterance,enframe)) %>% 
+  mutate(utterance=purrr::map(utterance,enframe)) %>% 
   unnest(utterance) %>% 
   pivot_wider(names_from=name, values_from=value) %>% 
   select(episode.id, utterance.id, char_type, pri_type) %>% 
@@ -287,10 +287,10 @@ This _still_ doesn't match what is in the paper, and I think it's because I was 
 ```{r}
 full_j %>% enframe %>% 
   rename(episode.id=name, episode=value) %>% 
-  mutate(episode=map(episode,enframe)) %>% 
+  mutate(episode=purrr::map(episode,enframe)) %>% 
   unnest(episode) %>% 
   rename(utterance.id=name, utterance=value) %>% 
-  mutate(utterance=map(utterance,enframe)) %>% 
+  mutate(utterance=purrr::map(utterance,enframe)) %>% 
   unnest(utterance) %>% 
   pivot_wider(names_from=name, values_from=value) %>% 
   select(episode.id, utterance.id, char_type, type) %>%

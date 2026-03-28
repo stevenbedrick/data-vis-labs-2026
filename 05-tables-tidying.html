@@ -315,7 +315,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">BMI 5/625 Labs, Spring 2025</a>
+      <a class="navbar-brand" href="index.html">BMI 5/625 Labs, Spring 2026</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -326,7 +326,7 @@ div.tocify {
   <a href="data-vis-resources.html">Resources</a>
 </li>
 <li>
-  <a href="https://sakai.ohsu.edu/portal/site/BMI-525-1-AD-Sp25">Sakai</a>
+  <a href="https://sakai.ohsu.edu/portal/site/BMI-525-1-AU-Sp26">Sakai</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -934,31 +934,31 @@ summary_table %&gt;%
 )</code></pre>
 <pre class="r"><code># HLO
 head(df)</code></pre>
-<pre><code>##   id       date   q1_m1_w1    q1_m1_w2    q1_m2_w3   q2_m1_w1   q2_m2_w1
-## 1  1 2015-01-01 -0.3801913  0.11202806  0.62482098  0.6090406 -0.3437918
-## 2  2 2015-01-02  0.2193031  0.36751713 -0.74372528 -0.8269653  1.3014064
-## 3  3 2015-01-03  1.0582088 -0.03929814 -0.88426340 -0.5623450 -0.2378508
-## 4  4 2015-01-04 -0.2926701  0.99628686  0.84767203  0.7809407  0.6935736
-## 5  5 2015-01-05 -1.2239996 -1.49461412  0.08496686  1.9678198 -1.7689950
-## 6  6 2015-01-06 -1.1582959 -1.53601822 -0.32337663 -0.8921214 -1.6376727
+<pre><code>##   id       date   q1_m1_w1    q1_m1_w2  q1_m2_w3   q2_m1_w1   q2_m2_w1
+## 1  1 2015-01-01 -0.3912259 -2.77942248 1.5285383 -2.7342631 -1.0757607
+## 2  2 2015-01-02  2.2127224  0.50703703 0.4521802 -0.4487100 -1.4950573
+## 3  3 2015-01-03 -1.5625910  1.75726823 1.6979244  0.3898872 -0.3395024
+## 4  4 2015-01-04 -0.7702976 -0.40868861 1.0157134 -1.0418806  0.4547007
+## 5  5 2015-01-05 -0.5547058  0.04337841 1.0636595 -1.1763156 -0.4716046
+## 6  6 2015-01-06  1.4105020  1.17211582 0.7204351  3.1222771 -1.3669210
 ##     q2_m2_w2
-## 1 -0.9613483
-## 2 -0.2836271
-## 3 -0.1501297
-## 4 -0.6773372
-## 5  0.8832897
-## 6 -0.9957476</code></pre>
+## 1  1.5399328
+## 2  0.4266710
+## 3 -1.0262685
+## 4 -0.6903070
+## 5 -0.9539138
+## 6 -1.7556159</code></pre>
 <pre class="r"><code>glimpse(df)</code></pre>
 <pre><code>## Rows: 10
 ## Columns: 8
 ## $ id       &lt;int&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ## $ date     &lt;date&gt; 2015-01-01, 2015-01-02, 2015-01-03, 2015-01-04, 2015-01-05, 2…
-## $ q1_m1_w1 &lt;dbl&gt; -0.3801913, 0.2193031, 1.0582088, -0.2926701, -1.2239996, -1…
-## $ q1_m1_w2 &lt;dbl&gt; 0.11202806, 0.36751713, -0.03929814, 0.99628686, -1.49461412,…
-## $ q1_m2_w3 &lt;dbl&gt; 0.62482098, -0.74372528, -0.88426340, 0.84767203, 0.08496686,…
-## $ q2_m1_w1 &lt;dbl&gt; 0.60904056, -0.82696530, -0.56234498, 0.78094067, 1.96781982,…
-## $ q2_m2_w1 &lt;dbl&gt; -0.3437918, 1.3014064, -0.2378508, 0.6935736, -1.7689950, -1.…
-## $ q2_m2_w2 &lt;dbl&gt; -0.96134830, -0.28362712, -0.15012965, -0.67733716, 0.8832897…</code></pre>
+## $ q1_m1_w1 &lt;dbl&gt; -0.39122589, 2.21272237, -1.56259099, -0.77029756, -0.554705…
+## $ q1_m1_w2 &lt;dbl&gt; -2.77942248, 0.50703703, 1.75726823, -0.40868861, 0.04337841,…
+## $ q1_m2_w3 &lt;dbl&gt; 1.5285383, 0.4521802, 1.6979244, 1.0157134, 1.0636595, 0.7204…
+## $ q2_m1_w1 &lt;dbl&gt; -2.7342631, -0.4487100, 0.3898872, -1.0418806, -1.1763156, 3.…
+## $ q2_m2_w1 &lt;dbl&gt; -1.0757607, -1.4950573, -0.3395024, 0.4547007, -0.4716046, -1…
+## $ q2_m2_w2 &lt;dbl&gt; 1.53993280, 0.42667100, -1.02626849, -0.69030700, -0.95391382…</code></pre>
 <div id="tidyrpivot_longer" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span>
 <code>tidyr::pivot_longer</code></h2>
@@ -969,12 +969,12 @@ head(df_tidy)</code></pre>
 <pre><code>## # A tibble: 6 × 4
 ##      id date       key       value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;     &lt;dbl&gt;
-## 1     1 2015-01-01 q1_m1_w1 -0.380
-## 2     1 2015-01-01 q1_m1_w2  0.112
-## 3     1 2015-01-01 q1_m2_w3  0.625
-## 4     1 2015-01-01 q2_m1_w1  0.609
-## 5     1 2015-01-01 q2_m2_w1 -0.344
-## 6     1 2015-01-01 q2_m2_w2 -0.961</code></pre>
+## 1     1 2015-01-01 q1_m1_w1 -0.391
+## 2     1 2015-01-01 q1_m1_w2 -2.78 
+## 3     1 2015-01-01 q1_m2_w3  1.53 
+## 4     1 2015-01-01 q2_m1_w1 -2.73 
+## 5     1 2015-01-01 q2_m2_w1 -1.08 
+## 6     1 2015-01-01 q2_m2_w2  1.54</code></pre>
 </div>
 <div id="tidyrseparate" class="section level2" number="3.2">
 <h2><span class="header-section-number">3.2</span>
@@ -986,12 +986,12 @@ head(df_sep)</code></pre>
 <pre><code>## # A tibble: 6 × 6
 ##      id date       quarter month week   value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1      m1    w1    -0.380
-## 2     1 2015-01-01 q1      m1    w2     0.112
-## 3     1 2015-01-01 q1      m2    w3     0.625
-## 4     1 2015-01-01 q2      m1    w1     0.609
-## 5     1 2015-01-01 q2      m2    w1    -0.344
-## 6     1 2015-01-01 q2      m2    w2    -0.961</code></pre>
+## 1     1 2015-01-01 q1      m1    w1    -0.391
+## 2     1 2015-01-01 q1      m1    w2    -2.78 
+## 3     1 2015-01-01 q1      m2    w3     1.53 
+## 4     1 2015-01-01 q2      m1    w1    -2.73 
+## 5     1 2015-01-01 q2      m2    w1    -1.08 
+## 6     1 2015-01-01 q2      m2    w2     1.54</code></pre>
 <pre class="r"><code># separate 1 col into 2 cols
 df_sep2 &lt;- df_tidy %&gt;%
   separate(key, into = c(&quot;quarter&quot;, &quot;period&quot;), extra = &quot;merge&quot;)
@@ -999,12 +999,12 @@ head(df_sep2)</code></pre>
 <pre><code>## # A tibble: 6 × 5
 ##      id date       quarter period  value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;   &lt;dbl&gt;
-## 1     1 2015-01-01 q1      m1_w1  -0.380
-## 2     1 2015-01-01 q1      m1_w2   0.112
-## 3     1 2015-01-01 q1      m2_w3   0.625
-## 4     1 2015-01-01 q2      m1_w1   0.609
-## 5     1 2015-01-01 q2      m2_w1  -0.344
-## 6     1 2015-01-01 q2      m2_w2  -0.961</code></pre>
+## 1     1 2015-01-01 q1      m1_w1  -0.391
+## 2     1 2015-01-01 q1      m1_w2  -2.78 
+## 3     1 2015-01-01 q1      m2_w3   1.53 
+## 4     1 2015-01-01 q2      m1_w1  -2.73 
+## 5     1 2015-01-01 q2      m2_w1  -1.08 
+## 6     1 2015-01-01 q2      m2_w2   1.54</code></pre>
 <p>stringr vs. tidyr separate by regular expression</p>
 </div>
 <div id="tidyrextract" class="section level2" number="3.3">
@@ -1019,12 +1019,12 @@ head(df_ext)</code></pre>
 <pre><code>## # A tibble: 6 × 5
 ##      id date       quarter month  value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1      m1    -0.380
-## 2     1 2015-01-01 q1      m1     0.112
-## 3     1 2015-01-01 q1      m2     0.625
-## 4     1 2015-01-01 q2      m1     0.609
-## 5     1 2015-01-01 q2      m2    -0.344
-## 6     1 2015-01-01 q2      m2    -0.961</code></pre>
+## 1     1 2015-01-01 q1      m1    -0.391
+## 2     1 2015-01-01 q1      m1    -2.78 
+## 3     1 2015-01-01 q1      m2     1.53 
+## 4     1 2015-01-01 q2      m1    -2.73 
+## 5     1 2015-01-01 q2      m2    -1.08 
+## 6     1 2015-01-01 q2      m2     1.54</code></pre>
 <p>We can see that, by default, it’s taking the first alphanumeric chunk
 of the value, and <code>extract</code>ing it. We can specify much more
 complex patterns:</p>
@@ -1036,12 +1036,12 @@ head(df_ext)</code></pre>
 <pre><code>## # A tibble: 6 × 6
 ##      id date       quarter month week   value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1      m1    w1    -0.380
-## 2     1 2015-01-01 q1      m1    w2     0.112
-## 3     1 2015-01-01 q1      m2    w3     0.625
-## 4     1 2015-01-01 q2      m1    w1     0.609
-## 5     1 2015-01-01 q2      m2    w1    -0.344
-## 6     1 2015-01-01 q2      m2    w2    -0.961</code></pre>
+## 1     1 2015-01-01 q1      m1    w1    -0.391
+## 2     1 2015-01-01 q1      m1    w2    -2.78 
+## 3     1 2015-01-01 q1      m2    w3     1.53 
+## 4     1 2015-01-01 q2      m1    w1    -2.73 
+## 5     1 2015-01-01 q2      m2    w1    -1.08 
+## 6     1 2015-01-01 q2      m2    w2     1.54</code></pre>
 </div>
 <div id="tidyrunite" class="section level2" number="3.4">
 <h2><span class="header-section-number">3.4</span>
@@ -1054,12 +1054,12 @@ head(df_uni)</code></pre>
 <pre><code>## # A tibble: 6 × 5
 ##      id date       period week   value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1_m1  w1    -0.380
-## 2     1 2015-01-01 q1_m1  w2     0.112
-## 3     1 2015-01-01 q1_m2  w3     0.625
-## 4     1 2015-01-01 q2_m1  w1     0.609
-## 5     1 2015-01-01 q2_m2  w1    -0.344
-## 6     1 2015-01-01 q2_m2  w2    -0.961</code></pre>
+## 1     1 2015-01-01 q1_m1  w1    -0.391
+## 2     1 2015-01-01 q1_m1  w2    -2.78 
+## 3     1 2015-01-01 q1_m2  w3     1.53 
+## 4     1 2015-01-01 q2_m1  w1    -2.73 
+## 5     1 2015-01-01 q2_m2  w1    -1.08 
+## 6     1 2015-01-01 q2_m2  w2     1.54</code></pre>
 <pre class="r"><code># let&#39;s say we want to combine quarter and month with nothing
 df_uni &lt;- df_sep %&gt;%
   unite(period, quarter:month, sep = &quot;&quot;)
@@ -1067,12 +1067,12 @@ head(df_uni)</code></pre>
 <pre><code>## # A tibble: 6 × 5
 ##      id date       period week   value
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;  &lt;chr&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1m1   w1    -0.380
-## 2     1 2015-01-01 q1m1   w2     0.112
-## 3     1 2015-01-01 q1m2   w3     0.625
-## 4     1 2015-01-01 q2m1   w1     0.609
-## 5     1 2015-01-01 q2m2   w1    -0.344
-## 6     1 2015-01-01 q2m2   w2    -0.961</code></pre>
+## 1     1 2015-01-01 q1m1   w1    -0.391
+## 2     1 2015-01-01 q1m1   w2    -2.78 
+## 3     1 2015-01-01 q1m2   w3     1.53 
+## 4     1 2015-01-01 q2m1   w1    -2.73 
+## 5     1 2015-01-01 q2m2   w1    -1.08 
+## 6     1 2015-01-01 q2m2   w2     1.54</code></pre>
 </div>
 <div id="tidyrpivot_wider" class="section level2" number="3.5">
 <h2><span class="header-section-number">3.5</span>
@@ -1084,12 +1084,12 @@ head(df_spread)</code></pre>
 <pre><code>## # A tibble: 6 × 6
 ##      id date       period     w1     w2     w3
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1m1   -0.380  0.112 NA    
-## 2     1 2015-01-01 q1m2   NA     NA      0.625
-## 3     1 2015-01-01 q2m1    0.609 NA     NA    
-## 4     1 2015-01-01 q2m2   -0.344 -0.961 NA    
-## 5     2 2015-01-02 q1m1    0.219  0.368 NA    
-## 6     2 2015-01-02 q1m2   NA     NA     -0.744</code></pre>
+## 1     1 2015-01-01 q1m1   -0.391 -2.78  NA    
+## 2     1 2015-01-01 q1m2   NA     NA      1.53 
+## 3     1 2015-01-01 q2m1   -2.73  NA     NA    
+## 4     1 2015-01-01 q2m2   -1.08   1.54  NA    
+## 5     2 2015-01-02 q1m1    2.21   0.507 NA    
+## 6     2 2015-01-02 q1m2   NA     NA      0.452</code></pre>
 </div>
 <div id="putting-it-all-together-pivot_longer-separate-pivot_wider"
 class="section level2" number="3.6">
@@ -1105,12 +1105,12 @@ head(df_tidiest)</code></pre>
 <pre><code>## # A tibble: 6 × 7
 ##      id date       quarter month     w1     w2     w3
 ##   &lt;int&gt; &lt;date&gt;     &lt;chr&gt;   &lt;chr&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1     1 2015-01-01 q1      m1    -0.380  0.112 NA    
-## 2     1 2015-01-01 q1      m2    NA     NA      0.625
-## 3     1 2015-01-01 q2      m1     0.609 NA     NA    
-## 4     1 2015-01-01 q2      m2    -0.344 -0.961 NA    
-## 5     2 2015-01-02 q1      m1     0.219  0.368 NA    
-## 6     2 2015-01-02 q1      m2    NA     NA     -0.744</code></pre>
+## 1     1 2015-01-01 q1      m1    -0.391 -2.78  NA    
+## 2     1 2015-01-01 q1      m2    NA     NA      1.53 
+## 3     1 2015-01-01 q2      m1    -2.73  NA     NA    
+## 4     1 2015-01-01 q2      m2    -1.08   1.54  NA    
+## 5     2 2015-01-02 q1      m1     2.21   0.507 NA    
+## 6     2 2015-01-02 q1      m2    NA     NA      0.452</code></pre>
 </div>
 </div>
 <div id="broom" class="section level1" number="4">

@@ -635,11 +635,10 @@ Again, it is _not_ for presentation-quality graphics, but more for data explorat
 ### Fancier: Leaflet
 
 
-[Leaflet](https://leafletjs.com) is a somewhat fancier and more powerful library for interactive maps that is widely used outside of the R ecosystem, but which has excellent R integration. We will also use the `leaflet.esri` extension, so we can use ESRI's aerial photos.
+[Leaflet](https://leafletjs.com) is a somewhat fancier and more powerful library for interactive maps that is widely used outside of the R ecosystem, but which has excellent R integration. `leaflet` is able to use map tiles from many providers, for example ESRI's aerial photo product.
 
 ```{r,warning=FALSE,message=FALSE}
 library(leaflet)
-library(leaflet.esri)
 ```
 
 As with `ggmap`, Leaflet wants things in WGS84 and will not automatically reproject our data for us, so we will need to work with `trees_park_projected`:
@@ -647,7 +646,7 @@ As with `ggmap`, Leaflet wants things in WGS84 and will not automatically reproj
 ```{r}
 # now make a map with leaflet!
 leaflet(trees_park_projected) %>% # we can pass in a dataframe to use...
-  addEsriBasemapLayer(esriBasemapLayers$Imagery) %>%
+  addProviderTiles("Esri.WorldImagery") %>% 
   setView(-122.719, 45.474, zoom=16) %>%
   addCircleMarkers()
 
@@ -657,7 +656,7 @@ One nice thing about Leaflet maps is that we can allow the user to see more info
 
 ```{r}
 leaflet(trees_park_projected) %>%
-  addEsriBasemapLayer(esriBasemapLayers$Imagery) %>%
+  addProviderTiles("Esri.WorldImagery") %>% 
   setView(-122.719, 45.474, zoom=16) %>%
   addCircleMarkers(label = ~Genus_spec) # we can refer to properties of the data frame this way
 ```

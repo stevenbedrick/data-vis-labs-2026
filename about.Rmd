@@ -9,15 +9,15 @@ htmltools::tagList(rmarkdown::html_dependency_font_awesome())
 
 
 This is an [R Markdown website](http://rmarkdown.rstudio.com/rmarkdown_websites.html). 
-The source can be found [on GitHub <i class="fa fa-github"></i>](https://github.com/stevenbedrick/data-vis-labs-2025).
+The source can be found [on GitHub <i class="fa fa-github"></i>](https://github.com/stevenbedrick/data-vis-labs-2026).
 
 Unless otherwise noted, these labs are based on [Alison Hill's](https://alison.rbind.io) labs from [the 2018 course](https://apreshill.github.io/data-vis-labs-2018/). Over the years since then, I have made some updates, modifications, and additions, but for the original labs (i.e., the ones that list her as the primary author), the authorship is entirely hers.
 
 The link to this year's labs is here:
 
-<https://stevenbedrick.github.io/data-vis-labs-2025/>
+<https://stevenbedrick.github.io/data-vis-labs-2026/>
 
-The full course syllabus is available here: [BMI 5/625: Principles & Practice of Data Visualization (Spring 2025)](https://dmice.ohsu.edu/bedricks/courses/bmi525/).
+The full course syllabus is available here: [BMI 5/625: Principles & Practice of Data Visualization (Spring 2026)](https://dmice.ohsu.edu/bedricks/courses/bmi525/).
 
 Course Director: Dr. Steven Bedrick
 

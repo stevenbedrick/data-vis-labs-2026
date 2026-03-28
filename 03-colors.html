@@ -325,7 +325,7 @@ div.tocify {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">BMI 5/625 Labs, Spring 2025</a>
+      <a class="navbar-brand" href="index.html">BMI 5/625 Labs, Spring 2026</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -336,7 +336,7 @@ div.tocify {
   <a href="data-vis-resources.html">Resources</a>
 </li>
 <li>
-  <a href="https://sakai.ohsu.edu/portal/site/BMI-525-1-AD-Sp25">Sakai</a>
+  <a href="https://sakai.ohsu.edu/portal/site/BMI-525-1-AU-Sp26">Sakai</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -1284,19 +1284,20 @@ devtools::install_github(&quot;clauswilke/colorblindr&quot;)</code></pre>
 my_sound_traj &lt;- sound_traj +
   scale_color_manual(values = beyonce_palette(18)[c(1, 4, 5)])</code></pre>
 <p>View that figure after color-vision-deficiency simulation:</p>
-<pre class="r fold-show"><code>library(colorblindr)
-cvd_grid(my_sound_traj)</code></pre>
-<p><img src="03-colors_files/figure-html/unnamed-chunk-64-1.png" width="672" /></p>
+<pre class="r fold-show"><code>library(colorblindr)</code></pre>
+<pre><code>Error in library(colorblindr): there is no package called &#39;colorblindr&#39;</code></pre>
+<pre class="r fold-show"><code>cvd_grid(my_sound_traj)</code></pre>
+<pre><code>Error in cvd_grid(my_sound_traj): could not find function &quot;cvd_grid&quot;</code></pre>
 <p>You can also use the colorblind-friendly palette in this package
 using <code>scale_color_OkabeIto</code> and
 <code>scale_fill_OkabeIto</code>:</p>
 <pre class="r fold-show"><code>cb_sound_traj &lt;- sound_traj +
-  scale_color_OkabeIto()
-
-cb_sound_traj</code></pre>
-<p><img src="03-colors_files/figure-html/unnamed-chunk-65-1.png" width="672" /></p>
+  scale_color_OkabeIto()</code></pre>
+<pre><code>Error in scale_color_OkabeIto(): could not find function &quot;scale_color_OkabeIto&quot;</code></pre>
+<pre class="r fold-show"><code>cb_sound_traj</code></pre>
+<pre><code>Error: object &#39;cb_sound_traj&#39; not found</code></pre>
 <pre class="r fold-show"><code>cvd_grid(cb_sound_traj)</code></pre>
-<p><img src="03-colors_files/figure-html/unnamed-chunk-65-2.png" width="672" /></p>
+<pre><code>Error in cvd_grid(cb_sound_traj): could not find function &quot;cvd_grid&quot;</code></pre>
 <p>You can still use this colorblind-friendly palette without the
 <code>colorblindr</code> package though. <a
 href="http://jfly.iam.u-tokyo.ac.jp/color/">Here</a> are the colors!</p>

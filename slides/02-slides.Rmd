@@ -537,7 +537,7 @@ ggplot(moma_ex, aes(painted, acquired, color = gender)) +
 
 Challenges 3-5 are in the [Lab 02 code-through](../02-moma.html)!
 
-https://stevenbedrick.github.io/data-vis-labs-2025/02-moma.html
+https://stevenbedrick.github.io/data-vis-labs-2026/02-moma.html
 
 ---
 class: inverse, middle, center

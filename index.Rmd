@@ -2,7 +2,7 @@
 title: "Principles & Practice of Data Visualization"
 ---
 
-This is the site for sharing our Data Visualization Labs for BMI 5/625 at Oregon Health & Science University, Spring 2025 edition.
+This is the site for sharing our Data Visualization Labs for BMI 5/625 at Oregon Health & Science University, Spring 2026 edition.
 
 - [Lab 00: Introduce Yourself](00-install_name_plot.html)
 
@@ -12,26 +12,26 @@ This is the site for sharing our Data Visualization Labs for BMI 5/625 at Oregon
       - [ggplot crash course](slides/01b-slides.html)
       - Addendum: [01-addendum.html](01-addendum.html)
 
-- [Lab 02: MoMA Museum Tour](02-moma.html)
-    - [Slides](slides/02-slides.html) ([pdf](slides/02-slides.pdf))
-     - Dataset: [https://stevenbedrick.github.io/data-vis-labs-2022/data/artworks.csv](data/artworks-cleaned.csv)
-<!-- <!--     - Dataset Cleaning *(optional)*: [02a-moma-cleaning.html](02a-moma-cleaning.html) --> 
-<!-- <!--     - Addendum: [02-addendum.html](02-addendum.html) --> 
-- [Lab 03: Colors with Animal Sounds](03-colors.html)
-    - [Slides](slides/03-slides.html) ([pdf](slides/03-slides.pdf))
-    - Dataset: [http://bit.ly/cs631-meow](http://bit.ly/cs631-meow)
-    - Dataset Cleaning *(optional, included for interest)*: [03a-meow-cleaning.html](03a-meow-cleaning.html)
-- [Lab 04: Tidy Data + Distributions](04-challenge_rev.html)
-    - [Slides](slides/04-slides.html) on data-tidying ([pdf](slides/04-slides.pdf))
-    - [Reference for Visualizing Distributions](04-distributions.html)
-- [Lab 05: Tables & Fonts](05-tables-challenge.html)
-    - [Reference Lab](05-tables.html)
-    - [Data Tidying Tricks for Tables](05-tables-tidying.html)
-- [Lab 06: Publishing](06-blogdown.html)
-- [Lab 07: Shiny](07-shiny.html)
-- [Lab 08: Maps](08-maps.html)
-- [Lab 10: Higher-dimensionality and Networks](10-high-d.html)
-- [Bonus "Lab 11": JSON Walkthrough](11-json.html)
+<!-- - [Lab 02: MoMA Museum Tour](02-moma.html) -->
+<!--     - [Slides](slides/02-slides.html) ([pdf](slides/02-slides.pdf)) -->
+<!--      - Dataset: [https://stevenbedrick.github.io/data-vis-labs-2022/data/artworks.csv](data/artworks-cleaned.csv) -->
+<!-- <!-- <!--     - Dataset Cleaning *(optional)*: [02a-moma-cleaning.html](02a-moma-cleaning.html) -->  -->
+<!-- <!-- <!--     - Addendum: [02-addendum.html](02-addendum.html) -->  -->
+<!-- - [Lab 03: Colors with Animal Sounds](03-colors.html) -->
+<!--     - [Slides](slides/03-slides.html) ([pdf](slides/03-slides.pdf)) -->
+<!--     - Dataset: [http://bit.ly/cs631-meow](http://bit.ly/cs631-meow) -->
+<!--     - Dataset Cleaning *(optional, included for interest)*: [03a-meow-cleaning.html](03a-meow-cleaning.html) -->
+<!-- - [Lab 04: Tidy Data + Distributions](04-challenge_rev.html) -->
+<!--     - [Slides](slides/04-slides.html) on data-tidying ([pdf](slides/04-slides.pdf)) -->
+<!--     - [Reference for Visualizing Distributions](04-distributions.html) -->
+<!-- - [Lab 05: Tables & Fonts](05-tables-challenge.html) -->
+<!--     - [Reference Lab](05-tables.html) -->
+<!--     - [Data Tidying Tricks for Tables](05-tables-tidying.html) -->
+<!-- - [Lab 06: Publishing](06-blogdown.html) -->
+<!-- - [Lab 07: Shiny](07-shiny.html) -->
+<!-- - [Lab 08: Maps](08-maps.html) -->
+<!-- - [Lab 10: Higher-dimensionality and Networks](10-high-d.html) -->
+<!-- - [Bonus "Lab 11": JSON Walkthrough](11-json.html) -->
 <!-- <!-- - [Lab 09: Tableau](09-tableau.html) --> 
 
 <!-- 

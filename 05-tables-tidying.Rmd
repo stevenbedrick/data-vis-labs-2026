@@ -17,6 +17,7 @@ library(tidyverse)
 library(dplyr)
 library(janitor)
 library(broom)
+# devtools::install_github("ismayc/pnwflights14")
 library(pnwflights14)
 data("flights", package = "pnwflights14")
 ```
