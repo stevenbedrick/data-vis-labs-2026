@@ -104,7 +104,7 @@ install_github("name_of_package") # replace with the actual name of the package
 
 _Side note: for this lab, you will not need to install any packages from Github- this is just for future reference._
 
-One nice thing about using RStudio Cloud is that a workspace project (like the one you've just opened up) can come pre-loaded with the necessary libraries, which is a real time-saver in a classroom environment. For example, the project you're using right now already has the `devtools` package installed. But for the next part of the lab, you'll need to install one additional package.
+One nice thing about using Posit Cloud is that a workspace project (like the one you've just opened up) can come pre-loaded with the necessary libraries, which is a real time-saver in a classroom environment. For example, the project you're using right now already has the `devtools` package installed. But for the next part of the lab, you'll need to install one additional package.
 
 Place your cursor in the console again (where you last typed `x` and `[4]` printed on the screen). You can use the first method that we described above (`install.packages()`) to install the  [`babynames`](https://github.com/hadley/babynames) package from CRAN:
 
