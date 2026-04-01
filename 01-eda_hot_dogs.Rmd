@@ -126,7 +126,7 @@ We will now progressively improve this visualization, one step at a time.
 ggplot(hot_dogs, aes(x = year, y = num_eaten)) + 
   geom_col() +
   labs(x = "Year", y = "Hot Dogs and Buns Consumed") +
-  ggtitle("Nathan's Hot Dog Eating Contest Results, 1981-2024", subtitle = "(Male contestants only)")
+  ggtitle("Nathan's Hot Dog Eating Contest Results, 1981-2025", subtitle = "(Male contestants only)")
 ```
 
 # Play With Colors

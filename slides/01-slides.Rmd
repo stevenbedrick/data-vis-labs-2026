@@ -531,6 +531,35 @@ library(tidyverse)
 
 See packages included here: https://www.tidyverse.org/packages/
 
+---
+
+## Dataframes are the core Tidyverse structure
+
+```{r,echo=FALSE}
+data.frame(x=c("a","b","c","d"), y=c(3, 4, 1, 5), z=c(TRUE,FALSE,NA,FALSE))
+```
+
+--
+
+Two rules:
+- Each column is of the _same type_
+- Each column is of the _same length_
+
+--
+
+Making a dataframe "by hand" is easy:
+
+--
+
+```{r,eval=FALSE}
+data.frame(
+  x=c("a","b","c","d"), 
+  y=c(3, 4, 1, 5), 
+  z=c(TRUE,FALSE,NA,FALSE)
+)
+```
+
+
 
 ---
 class: center, middle, inverse
@@ -558,6 +587,8 @@ Else: `CTRL` + `SHIFT` + `M`
 
 ---
 class: middle
+
+# Motivating the Pipe
 
 *Nesting* a dataframe inside a function is hard to read.
 
@@ -587,6 +618,8 @@ Now, the "sentence" starts with a <font color="#ED1941">noun</font>.
 
 ---
 class: middle
+
+# Motivating the Pipe
 
 Sequences of functions make you read *inside out*
 
