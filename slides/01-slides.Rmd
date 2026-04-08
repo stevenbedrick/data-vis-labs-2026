@@ -638,6 +638,15 @@ babynames %>% filter(sex == "M") %>% slice(1)
 ```
 
 
+
+
+
+x %>% sample(10) %>% slice(1)
+
+
+
+
+
 ---
 class: inverse, middle, center
 

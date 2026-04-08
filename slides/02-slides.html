@@ -56,7 +56,7 @@ We'll use data from the Museum of Modern Art (MoMA)
 Use this code chunk to import my cleaned CSV file:
 
 
-```r
+``` r
 library(readr)
 moma &lt;- read_csv("../data/artworks-cleaned.csv")
 ```
@@ -117,7 +117,7 @@ class: middle, center, inverse
 --
 
 
-```r
+``` r
 peds &lt;- all.patients %&gt;% filter(age &lt;= 18)
 ```
 
@@ -137,7 +137,7 @@ peds &lt;- all.patients %&gt;% filter(age &lt;= 18)
 --
 
 
-```r
+``` r
 peds &lt;- peds %&gt;% arrange(age)
 ```
 
@@ -152,7 +152,7 @@ peds &lt;- peds %&gt;% arrange(age)
 --
 
 
-```r
+``` r
 # option 1:
 peds &lt;- peds %&gt;% arrange(desc(age))
 ```
@@ -160,7 +160,7 @@ peds &lt;- peds %&gt;% arrange(desc(age))
 --
 
 
-```r
+``` r
 # option 2:
 peds &lt;- peds %&gt;% arrange(-age)
 ```
@@ -176,14 +176,14 @@ peds &lt;- peds %&gt;% arrange(-age)
 --
 
 
-```r
+``` r
 peds &lt;- peds %&gt;% mutate(age.in.months = age * 12)
 ```
 
 --
 
 
-```r
+``` r
 # convert to meters from feet
 peds &lt;- peds %&gt;% mutate(height = height * 0.305)
 ```
@@ -195,7 +195,7 @@ peds &lt;- peds %&gt;% mutate(height = height * 0.305)
 --
 
 
-```r
+``` r
 peds &lt;- peds %&gt;% mutate(
     age.in.months = age * 12, 
     is.school.age = age &gt;= 5,
@@ -234,7 +234,7 @@ class: middle, center, inverse
 
 
 
-```r
+``` r
 ?base::Logic
 ```
 
@@ -289,7 +289,7 @@ Exclusive or (`xor`) is exclusive, so `xor(x, y)` really means:
 * but not both x &amp; y
 
 
-```r
+``` r
 x &lt;- c(0, 1, 0, 1)
 y &lt;- c(0, 0, 1, 1)
 boolean_or &lt;- x | y
@@ -316,7 +316,7 @@ class: middle, center, inverse
 
 ---
 
-```r
+``` r
 ?Comparison
 ```
 
@@ -402,7 +402,7 @@ I.e., their operation can be performed on partitions of your data:
 Consider `summarise`:
 
 
-```r
+``` r
 penguins %&gt;% filter(!is.na(bill_length_mm)) %&gt;% 
   summarise(mean_length=mean(bill_length_mm))
 ```
@@ -428,7 +428,7 @@ I.e., their operation can be performed on partitions of your data:
 
 
 
-```r
+``` r
 penguins %&gt;% filter(!is.na(bill_length_mm)) %&gt;% 
   group_by(species) %&gt;% 
   summarise(mean_length=mean(bill_length_mm))
@@ -460,7 +460,7 @@ What does `group_by` actually _do_?
 --
 
 
-```r
+``` r
 penguins.grouped &lt;- penguins %&gt;% group_by(species)
 penguins.grouped
 ```
@@ -497,7 +497,7 @@ penguins.grouped
 --
 
 
-```r
+``` r
 penguins %&gt;% group_by(species, sex) %&gt;% tally
 ```
 
@@ -508,7 +508,7 @@ Note that the resulting dataframe is still grouped by `species`!
 --
 
 
-```r
+``` r
 penguins %&gt;% group_by(species, sex)
 ```
 
@@ -594,7 +594,7 @@ From `ggplot2`:
 # 1. A scatterplot
 
 
-```r
+``` r
 library(ggplot2)
 ggplot(moma_ex, aes(painted, acquired)) + 
   geom_point()
@@ -610,7 +610,7 @@ ggplot(moma_ex, aes(painted, acquired)) +
 # 2. `color` points by `gender`
 
 
-```r
+``` r
 library(ggplot2)
 ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
   geom_point()
@@ -625,7 +625,7 @@ ggplot(moma_ex, aes(painted, acquired, color = gender)) +
 # 3. `size` points by `area`
 
 
-```r
+``` r
 library(ggplot2)
 ggplot(moma_ex, aes(painted, acquired, size = area)) + 
   geom_point()
@@ -639,7 +639,7 @@ ggplot(moma_ex, aes(painted, acquired, size = area)) +
 # 4. Faceting 
 
 
-```r
+``` r
 library(ggplot2)
 ggplot(moma_ex, aes(painted, acquired, color = gender)) + 
   geom_point() + facet_wrap(~gender)
@@ -666,7 +666,7 @@ ggplot(moma_ex, aes(painted, acquired, color = gender)) +
 
 Challenges 3-5 are in the [Lab 02 code-through](../02-moma.html)!
 
-https://stevenbedrick.github.io/data-vis-labs-2025/02-moma.html
+https://stevenbedrick.github.io/data-vis-labs-2026/02-moma.html
 
 ---
 class: inverse, middle, center
@@ -693,9 +693,9 @@ class: inverse, middle, center
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "atelier-lakeside-light",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "atelier-lakeside-light",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

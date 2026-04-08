@@ -100,14 +100,17 @@ If you want more:
 
 <p class="text-info"> __Hint:__ These questions can be answered using the `dplyr` function `glimpse`.</p>
 
+```{r,echo=FALSE}
+library(dplyr)
+```
 
-```{r}
+```{r, eval=FALSE,class.source = 'fold-show'}
 library(dplyr)
 moma
 glimpse(moma)
 ```
 
-There are `r nrow(moma)` paintings in `moma`.
+<!--There are `r nrow(moma)` paintings in `moma`.-->
 
 ## What is the first painting acquired?
 
@@ -151,6 +154,7 @@ oldest <- moma %>%
   slice(1)
 ```
 
+
 To do inline comments, I could say that the oldest painting is `r oldest %>% pull(title)`, painted by `r oldest %>% pull(artist)` in `r oldest %>% pull(year_created)`.
 
 ## How many artists?
@@ -160,7 +164,7 @@ To do inline comments, I could say that the oldest painting is `r oldest %>% pul
 <p class="text-info"> __Hint:__ Try `dplyr::distinct`.</p>
  
 
-```{r}
+```{r,eval=FALSE,class.source = 'fold-show'}
 moma %>% 
   distinct(artist)
 ```
@@ -196,7 +200,7 @@ pablo <- moma %>%
   slice(1)
 ```
 
-In the `?count` documentation, it says: "`count` and `tally` are designed so that you can call them repeatedly, each time rolling up a level of detail." Try running `count()` again (leave parentheses empty) on your last code chunk.
+In the `?count` documentation, it says: "`count` and `tally` are designed so that you can call them repeatedly, each time rolling up a level of detail." Try running `count()` again (leave parentheses empty) on your last code chunk, like so:
 
 ```{r}
 moma %>% 
@@ -220,7 +224,7 @@ moma %>%
   count(artist_gender, artist, sort = TRUE) 
 ```
 
-This output is not superhelpful as we already know that `r pablo %>% pull(artist)` has `r pablo %>% pull(n)` paintings in the MoMA collection. But how can we find out which female artist has the most paintings? We have a few options. Let's first add a `filter` for females.
+This output is not super-helpful as we already know that `r pablo %>% pull(artist)` has `r pablo %>% pull(n)` paintings in the MoMA collection. But how can we find out which female artist has the most paintings? We have a few options. Let's first add a `filter` for females.
 
 ```{r}
 moma %>% 
