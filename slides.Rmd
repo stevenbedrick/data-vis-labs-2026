@@ -48,11 +48,11 @@ knitr::include_url("slides/02-slides.html")
 
 - RStudio `ggplot2` Cheatsheet: https://github.com/rstudio/cheatsheets/blob/master/data-visualization-2.1.pdf
 
-<!-- ### 03: Working with Data -->
+### 03: Working with Colors
 
-<!-- ```{r} -->
-<!-- knitr::include_url("slides/03-slides.html") -->
-<!-- ``` -->
+```{r}
+knitr::include_url("slides/03-slides.html")
+```
 
 <!-- ### 04: Working with Tidy Data -->
 
