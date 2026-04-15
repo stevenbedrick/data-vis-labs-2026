@@ -63,7 +63,7 @@ Use this code chunk to import my cleaned CSV file:
 
 ```{r eval = FALSE}
 library(readr)
-sounds <- read_csv("http://bit.ly/cs631-meow")
+sounds <- read_csv("https://raw.githubusercontent.com/stevenbedrick/data-vis-labs-2026/refs/heads/main/data/animal_sounds_summary.csv")
 ```
 
 
@@ -284,7 +284,11 @@ Many functions operate on vectors:
 
 --
 
-One way to think of them : factories to convert atomic vectors of length `n` to atomic vectors of length 1!
+These are called _aggregate functions_.
+
+-- 
+
+One way to think of them: factories to convert atomic vectors of length `n` to atomic vectors of length 1!
 
 ---
 
@@ -385,6 +389,22 @@ sounds <- sounds %>%
 sounds %>% 
   mutate(prop_produce = prop_produce * 100)
 ```
+
+---
+# Wherefore `summarize`?
+
+`summarize`: it's like `mutate`, but only for aggregate functions!
+
+--
+
+Switching datasets temporarily:
+
+```{r}
+penguins %>% 
+  group_by(species) %>% 
+  summarize(avg_bill_len=mean(bill_len, na.rm=TRUE))
+```
+
 
 ---
 class: middle, center, inverse
@@ -531,7 +551,7 @@ library(palmerpenguins)
 penguins %>% 
   ggplot(aes(x=bill_length_mm, y=bill_depth_mm, 
              shape=species, color=species)) + 
-  geom_point(size=2)
+  geom_point(size=4)
 ```
 
 

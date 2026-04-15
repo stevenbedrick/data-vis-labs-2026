@@ -66,9 +66,9 @@ We'll use data from [Wordbank](http://wordbank.stanford.edu)- an open source dat
 Use this code chunk to import my cleaned CSV file:
 
 
-```r
+``` r
 library(readr)
-sounds &lt;- read_csv("http://bit.ly/cs631-meow")
+sounds &lt;- read_csv("https://raw.githubusercontent.com/stevenbedrick/data-vis-labs-2026/refs/heads/main/data/animal_sounds_summary.csv")
 ```
 
 
@@ -100,7 +100,7 @@ https://github.com/rstudio/cheatsheets/blob/master/base-r.pdf
 --
 
 
-```r
+``` r
 typeof(sounds$age)
 ```
 
@@ -108,7 +108,7 @@ typeof(sounds$age)
 [1] "double"
 ```
 
-```r
+``` r
 typeof(sounds$sound)
 ```
 
@@ -116,7 +116,7 @@ typeof(sounds$sound)
 [1] "character"
 ```
 
-```r
+``` r
 typeof(sounds$sound == "meow")
 ```
 
@@ -128,7 +128,7 @@ typeof(sounds$sound == "meow")
 # Even better: `glimpse`
 
 
-```r
+``` r
 glimpse(sounds)
 ```
 
@@ -215,7 +215,7 @@ $ kids_respond &lt;dbl&gt; 35, 35, 35, 91, 93, 93, 139, 145, 143, 94, 94, 94, 14
 What is `2`, anyway?
 
 
-```r
+``` r
 typeof(2)
 ```
 
@@ -225,7 +225,7 @@ typeof(2)
 
 --
 
-```r
+``` r
 length(2)
 ```
 
@@ -237,7 +237,7 @@ length(2)
 
 `2` is really a vector of length 1!
 
-```r
+``` r
 is.vector(2)
 ```
 
@@ -253,7 +253,7 @@ What about longer vectors?
 
 --
 
-```r
+``` r
 typeof(c(2,2))
 ```
 
@@ -261,7 +261,7 @@ typeof(c(2,2))
 [1] "double"
 ```
 
-```r
+``` r
 length(c(2,2))
 ```
 
@@ -280,7 +280,7 @@ _Atomic Vectors_ in `R` are of the same _type_ (all numbers, all logicals, etc.)
 _Lists_ are vectors made up of multiple items of _different_ types:
 
 
-```r
+``` r
 my.list &lt;- list(c(1,2,3), c(TRUE, FALSE, TRUE))
 my.list
 ```
@@ -302,7 +302,7 @@ _Atomic Vectors_ in `R` are of the same _type_ (all numbers, all logicals, etc.)
 _Lists_ are vectors made up of multiple items of _different_ types:
 
 
-```r
+``` r
 my.list &lt;- list(x=c(1,2,3), y=c(TRUE, FALSE, TRUE))
 my.list
 ```
@@ -333,7 +333,7 @@ Many operations in R are _vectorized_ (i.e., operate on an entire vector all in 
 Adding a "scalar" (i.e., a vector of length 1) to a vector:
 
 
-```r
+``` r
 some.numbers &lt;- c(1,2,3)
 some.numbers + 1
 ```
@@ -347,7 +347,7 @@ some.numbers + 1
 Adding two vectors of identical length:
 
 
-```r
+``` r
 some.numbers + c(2,2,2)
 ```
 
@@ -364,7 +364,7 @@ What if there is a length mis-match?
 --
 
 
-```r
+``` r
 some.numbers + c(8,8,8,8)
 ```
 
@@ -383,7 +383,7 @@ The shorter vector is _recycled_ until it matches the length of the larger vecto
 --
 
 
-```r
+``` r
 c(1,2,3,1) + c(8,8,8,8)
 ```
 
@@ -406,7 +406,7 @@ This is how adding a scalar to a vector works, under the hood!
 Vectorization is very useful:
 
 
-```r
+``` r
 y_hat &lt;- predict(some.model)
 residuals &lt;- y_hat - my.data$y
 ```
@@ -425,7 +425,11 @@ Many functions operate on vectors:
 
 --
 
-One way to think of them : factories to convert atomic vectors of length `n` to atomic vectors of length 1!
+These are called _aggregate functions_.
+
+-- 
+
+One way to think of them: factories to convert atomic vectors of length `n` to atomic vectors of length 1!
 
 ---
 
@@ -485,7 +489,7 @@ class: middle, center, inverse
 --
 
 
-```r
+``` r
 sounds %&gt;% 
   mutate(form = "WS")
 ```
@@ -520,7 +524,7 @@ sounds %&gt;%
 --
 
 
-```r
+``` r
 sounds %&gt;% 
   mutate(prop_produce = kids_produce / kids_respond)
 ```
@@ -556,7 +560,7 @@ sounds %&gt;%
 
 
 
-```r
+``` r
 sounds %&gt;% 
   mutate(prop_produce = prop_produce * 100)
 ```
@@ -577,6 +581,32 @@ sounds %&gt;%
 10    11 cockadoodledoo            0           94         0   
 # ℹ 23 more rows
 ```
+
+---
+# Wherefore `summarize`?
+
+`summarize`: it's like `mutate`, but only for aggregate functions!
+
+--
+
+Switching datasets temporarily:
+
+
+``` r
+penguins %&gt;% 
+  group_by(species) %&gt;% 
+  summarize(avg_bill_len=mean(bill_len, na.rm=TRUE))
+```
+
+```
+# A tibble: 3 × 2
+  species   avg_bill_len
+  &lt;fct&gt;            &lt;dbl&gt;
+1 Adelie            38.8
+2 Chinstrap         48.8
+3 Gentoo            47.5
+```
+
 
 ---
 class: middle, center, inverse
@@ -614,7 +644,7 @@ http://r4ds.had.co.nz/transform.html#mutate-funs
 ---
 
 
-```r
+``` r
 ?Arithmetic
 ```
 
@@ -674,7 +704,7 @@ http://r4ds.had.co.nz/transform.html#mutate-funs
 &lt;/table&gt;
 
 
-```r
+``` r
 5 %/% 2 # 2 goes into 5 two times with...
 ```
 
@@ -682,7 +712,7 @@ http://r4ds.had.co.nz/transform.html#mutate-funs
 [1] 2
 ```
 
-```r
+``` r
 5 %% 2 # 1 left over
 ```
 
@@ -794,34 +824,34 @@ At the end of today's lab, you'll see an extra section on continuous colors.
 
 
 
-```r
+``` r
 penguins %&gt;% 
   ggplot(aes(x=bill_length_mm, y=bill_depth_mm, 
              shape=species, color=species)) + 
   geom_point(size=2)
 ```
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-30-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-31-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 
 
 ---
 ## But first: `shape`
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-31-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 ---
 ## Shapes with `color = "hotpink"`
 
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-32-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-33-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 
 ---
 ## Shapes with `fill = "gold"`
 
 
-&lt;img src="03-slides_files/figure-html/unnamed-chunk-33-1.png" width="65%" style="display: block; margin: auto;" /&gt;
+&lt;img src="03-slides_files/figure-html/unnamed-chunk-34-1.png" width="65%" style="display: block; margin: auto;" /&gt;
 
 
 ---
@@ -832,7 +862,7 @@ penguins %&gt;%
 --
 
 
-```r
+``` r
 default_aes = aes(
     shape = 19, colour = "black", size = 1.5, fill = NA,
     alpha = NA, stroke = 0.5
@@ -857,9 +887,9 @@ For when we need to go beyond what `fill` and `color` can do for us...
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script>var slideshow = remark.create({
-"highlightStyle": "atelier-lakeside-light",
-"highlightLines": true,
-"countIncrementalSlides": false
+  "highlightStyle": "atelier-lakeside-light",
+  "highlightLines": true,
+  "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));

@@ -324,9 +324,7 @@ fct_reorder2(
 ) %>% levels
 ```
 
-Note that the levels are now sorted. This (somewhat convoluted) procedure is very useful for when you have a line chart of two quantitative variables, colored by a factor variable, and is designed to be use as part of your ggplot workflow. Let
-
-'s see the difference this seemingly-small detail can make for a plot: 
+Note that the levels are now sorted. This (somewhat convoluted) procedure is very useful for when you have a line chart of two quantitative variables, colored by a factor variable, and is designed to be use as part of your ggplot workflow. Let's see the difference this seemingly-small detail can make for a plot: 
 
 ```{r, class.source = "fold-show"}
 sounds <- sounds %>% 
@@ -435,10 +433,15 @@ ggplot(sounds, aes(x = age,
   </div>
 </div>
 
+<details>
+  <summary>Click for Answer</summary>
+
 Answers: 
 
 - In the first, we used `scale_fill_manual`, but the in the global aesthetics, we mapped the `color`, not `fill`, aesthetic onto the `sound` variable.
 - In the second, we did define the `fill` aesthetic and used `scale_fill_manual`, so that is good. But `geom_line` only understands the `color` aesthetic, not `fill`. And for `geom_point`, the default shape for is 19, which does not understand the `fill` aesthetic.
+
+</details>
 
 <div class="panel panel-success">
   <div class="panel-heading">Challenge #6:</div>
@@ -632,7 +635,7 @@ sound_traj +
   <div class="panel-body">
 What if you just don't want to use the colors in the order they are in? Use a `wes_palette` of your choice. Using our code from above, try picking the last 3 colors of a palette. Add it to your `sound_traj` plot.
 
-If this was easy, try using colors 2, 3, and 5 instead.
+If this was easy, try specifically using colors 2, 3, and 5 instead.
 
 ```{r}
 sound_traj +
@@ -685,7 +688,8 @@ We can see that indeed, the colors from the palette are being used, but that the
 
 ### `ggthemes` palettes
 
-To use these palettes, you'll need to install the `ggthemes` package from CRAN. This chunk of code tells you how:
+`ggthemes` is a package that contains color palettes for many familiar mass-media publications. 
+You'll need to install the `ggthemes` package from CRAN. This chunk of code tells you how:
 
 ```{r eval = FALSE,class.source = "fold-show"}
 install.packages("ggthemes")
@@ -715,7 +719,9 @@ sound_traj + scale_color_nejm()
 
 ### Palettes from the Queen Bee
 
-To use [Beyonce palettes](https://github.com/dill/beyonce), you'll need to install the `beyonce` package from GitHub using `devtools::install_github()`. This chunk of code tells you how:
+Wes Anderson fans have `wesanderson`; not to worry, Beyonce, fans, you haven't been forgotten: the [Beyonce palettes](https://github.com/dill/beyonce) package has you covered! 
+Note that, for this one, you can't use `install.packages` because the authors haven't listed it on CRAN. 
+Instead, you'll need to go straight to the source and install the `beyonce` package from GitHub using `devtools::install_github()`. This chunk of code tells you how:
 
 ```{r eval = FALSE,class.source = "fold-show"}
 install.packages("devtools")
@@ -826,21 +832,21 @@ install.packages("colorspace", repos = "http://R-Forge.R-project.org")
 devtools::install_github("clauswilke/colorblindr")
 ```
 
-To use:
+To use, first we make a plot and save it to a variable:
 ```{r, class.source = "fold-show"}
 # save a ggplot object
 my_sound_traj <- sound_traj +
   scale_color_manual(values = beyonce_palette(18)[c(1, 4, 5)])
 ```
 
-View that figure after color-vision-deficiency simulation:
+Then, we can use the `cvd_grid` function to view that figure after color-vision-deficiency simulation:
 
 ```{r, class.source = "fold-show"}
 library(colorblindr)
 cvd_grid(my_sound_traj)
 ```
 
-You can also use the colorblind-friendly palette in this package using `scale_color_OkabeIto` and `scale_fill_OkabeIto`:
+The package also includes an implementation of the Okabe-Ito color palette (`scale_color_OkabeIto` and `scale_fill_OkabeIto`):
 
 ```{r, class.source = "fold-show"}
 cb_sound_traj <- sound_traj +
@@ -850,11 +856,10 @@ cb_sound_traj
 cvd_grid(cb_sound_traj)
 ```
 
-You can still use this colorblind-friendly palette without the `colorblindr` package though. [Here](http://jfly.iam.u-tokyo.ac.jp/color/) are the colors!
+Note: If you want to use this colorblind-friendly palette without installing the whole `colorblindr` package, you can [look up the raw colors](https://siegal.bio.nyu.edu/color-palette/) and roll your own palette using `scale_colour_manual()`!
 
-![](http://jfly.iam.u-tokyo.ac.jp/color/image/pallete.jpg)
 
-The [Cookbook for R](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette) provided the matching hex colors too to make life easier:
+The [Cookbook for R](http://www.cookbook-r.com/Graphs/Colors_(ggplot2)/#a-colorblind-friendly-palette) provided the matching hex colors, too, which makes life easier:
 ```{r, class.source = "fold-show"}
 cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
 
@@ -865,7 +870,7 @@ sound_traj +
 
 ## Labels
 
-When working with colors, the _default_ pattern, enforced by `ggplot`, is to use a figure legend to indicate which color goes with which level of a factor. 
+When working with discrete colors, the _default_ pattern, enforced by `ggplot`, is to use a figure legend to indicate which color goes with which level of a factor. 
 However, this is not always the best way to go! 
 Another option is to directly label your data within the plot itself.
 When should you consider this option?
@@ -875,7 +880,7 @@ When should you consider this option?
 
 There are several ways to do this, but a good place to start is `ggrepel`, which provides a `geom_text_repel` for placing labels:
 
-```{r}
+```{r, class.source = "fold-show"}
 library(ggrepel)
 
 sounds <- sounds %>%
@@ -896,7 +901,7 @@ ggplot(sounds, aes(x = age,
   guides(color = FALSE)
 ```
 
-
+Note that in this example, we are manually hiding the legend ("guide") for the `color` aesthetic; what happens if we don't do this?
 
 # Continuous colors
 
