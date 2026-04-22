@@ -10,7 +10,7 @@ output:
 
 # Overview
 
-Both challenges are due by the end of the day via Sakai on Wednesday April 30th. For the first challenge, focused on data-tidying, you'll want to refer back to our [slides](slides/04-slides.html). For the second challenge, you'll want to refer to the [reference lab](04-distributions.html).
+Both challenges are due by the end of the day via Sakai on Wednesday April 29th. For the first challenge, focused on data-tidying, you'll want to refer back to our [slides](slides/04-slides.html). For the second challenge, you'll want to refer to the [reference lab](04-distributions.html).
 
 # Challenge 1: Data-Tidying
 
@@ -32,7 +32,7 @@ library(gapminder)
 ?gapminder
 ```
 
-Pick at least __two__ of the tasks below from the task menu and approach each with both a table (containing the appropriately-wrangled data) _and_ a companion figure. 
+Pick at least __two__ of the tasks below from the task menu and approach each with **both** a table (containing the appropriately-wrangled data) _and_ a companion figure. 
 
   * `dplyr` should be your main data manipulation tool
   * `ggplot2` should be your main visualization tool
@@ -40,6 +40,8 @@ Pick at least __two__ of the tasks below from the task menu and approach each wi
 Make observations about what your tables/figures show and about the process. If you want to do something comparable but different, i.e. swap one quantitative variable for another- go for it!
 
 You do not have to use `tidyr` or otherwise worry about reshaping your tables. Many of your tables may not be formatted perfectly in the report. Simply printing `dplyr` tabular output is fine. For all things, graphical and tabular, if you're dissatisfied with a result, discuss the problem, what you tried to do to fix it, and move on.
+
+**Note:** The dataset is _chronological_, in that it contains data over multiple years for the same country and quantity. Make sure that your analysis takes this into account! In other words, make sure _not_ to blindly treat e.g. datapoints about a country's GDP from 1950 as being comparable another country's GDP in 2000.
 
 ## Task menu
 

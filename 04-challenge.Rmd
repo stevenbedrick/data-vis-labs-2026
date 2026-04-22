@@ -10,7 +10,7 @@ output:
 
 # Overview
 
-Both challenges are due by noon via Sakai on Wednesday May 1. For the first tidy challenge, you'll want to refer back to our [slides](slides/04-slides.html). For the second challenge, you may want to refer to the [reference lab](04-distributions.html) for ideas.
+Both challenges are due by noon via Sakai on Wednesday April 29. For the first tidy challenge, you'll want to refer back to our [slides](slides/04-slides.html). For the second challenge, you may want to refer to the [reference lab](04-distributions.html) for ideas.
 
 ## Part 1: Tidying challenge
 

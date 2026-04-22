@@ -277,7 +277,7 @@ Data</h1>
 <div id="overview" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Overview</h1>
 <p>Both challenges are due by the end of the day via Sakai on Wednesday
-April 30th. For the first challenge, focused on data-tidying, you’ll
+April 29th. For the first challenge, focused on data-tidying, you’ll
 want to refer back to our <a href="slides/04-slides.html">slides</a>.
 For the second challenge, you’ll want to refer to the <a
 href="04-distributions.html">reference lab</a>.</p>
@@ -321,8 +321,8 @@ Exercise</h1>
 library(gapminder)
 ?gapminder</code></pre>
 <p>Pick at least <strong>two</strong> of the tasks below from the task
-menu and approach each with both a table (containing the
-appropriately-wrangled data) <em>and</em> a companion figure.</p>
+menu and approach each with <strong>both</strong> a table (containing
+the appropriately-wrangled data) <em>and</em> a companion figure.</p>
 <ul>
 <li><code>dplyr</code> should be your main data manipulation tool</li>
 <li><code>ggplot2</code> should be your main visualization tool</li>
@@ -336,6 +336,12 @@ perfectly in the report. Simply printing <code>dplyr</code> tabular
 output is fine. For all things, graphical and tabular, if you’re
 dissatisfied with a result, discuss the problem, what you tried to do to
 fix it, and move on.</p>
+<p><strong>Note:</strong> The dataset is <em>chronological</em>, in that
+it contains data over multiple years for the same country and quantity.
+Make sure that your analysis takes this into account! In other words,
+make sure <em>not</em> to blindly treat e.g. datapoints about a
+country’s GDP from 1950 as being comparable another country’s GDP in
+2000.</p>
 <div id="task-menu" class="section level2" number="3.1">
 <h2><span class="header-section-number">3.1</span> Task menu</h2>
 <ul>

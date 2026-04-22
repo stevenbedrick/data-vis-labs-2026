@@ -21,9 +21,9 @@ This is the site for sharing our Data Visualization Labs for BMI 5/625 at Oregon
     - [Slides](slides/03-slides.html) ([pdf](slides/03-slides.pdf))
     - [Dataset](https://raw.githubusercontent.com/stevenbedrick/data-vis-labs-2026/refs/heads/main/data/animal_sounds_summary.csv)
     - Dataset Cleaning *(optional, included for interest)*: [03a-meow-cleaning.html](03a-meow-cleaning.html)
-<!-- - [Lab 04: Tidy Data + Distributions](04-challenge_rev.html) -->
-<!--     - [Slides](slides/04-slides.html) on data-tidying ([pdf](slides/04-slides.pdf)) -->
-<!--     - [Reference for Visualizing Distributions](04-distributions.html) -->
+- [Lab 04: Tidy Data + Distributions](04-challenge_rev.html)
+    - [Slides](slides/04-slides.html) on data-tidying ([pdf](slides/04-slides.pdf))
+    - [Reference for Visualizing Distributions](04-distributions.html)
 <!-- - [Lab 05: Tables & Fonts](05-tables-challenge.html) -->
 <!--     - [Reference Lab](05-tables.html) -->
 <!--     - [Data Tidying Tricks for Tables](05-tables-tidying.html) -->
