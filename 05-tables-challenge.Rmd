@@ -24,8 +24,10 @@ Using the data set from the reference lab of PNW flights, choose three analytica
   - the `air_time` column will be useful here
 - Time of Day: are some destinations from PDX "morning" destinations vs "evening" ones? 
 
-_Note:_ For some of these questions, you may need to make editorial/analytical choices about what data to include, how to define metrics, etc. 
-For example, it may be the case that improvement/decline in timeliness may be tricky to measure, as naïve approachces may be easily skewed by outliers or by variation in the data. 
+## Note about planning your analyses
+
+For some of these questions, you may need to make editorial/analytical choices about what data to include, how to define metrics, etc. 
+For example, it may be the case that improvement/decline in timeliness may be tricky to measure, as naïve approaches may be easily skewed by outliers or by variation in the data. 
 You may choose to exclude certain low-volume carriers, or only include routes that are present throughout the entire dataset, or something else altogether. 
 Make sure your table includes sufficient information to guide the interpretation and comprehension of your analysis.
 
@@ -34,7 +36,7 @@ Make sure to keep in mind the design principles that we discussed on Monday rega
 ## Things to consider
 
 1. For your analytical questions of choice, what measure of central tendency is appropriate? Does mean or median make more sense? What should you look at to try and answer that question?
-2. Pay attention to formatting in your tables- numbers should have commas in appropriate places, column headers should be human-readable, as opposed to just whatever the dataframe column was named ("Total on-time flights" as opposed to "total_on_time_flights"), etc.
+2. **Pay attention to formatting in your tables:** numbers should have commas in appropriate places, column headers should be human-readable, as opposed to just whatever the dataframe column was named ("Total on-time flights" as opposed to "total_on_time_flights"), etc.
 3. The flight delays dataset has month as a numerical variable; does this make sense for display in your table?
 4. The `pnwflights14` dataset has several ancillary dataframes besides `flights` that might be useful for polishing your table.
   - For example, the `airports` dataframe includes both the FAA airport code ("PDX") as well as the actual display name of each airport.
@@ -54,5 +56,5 @@ Make sure to keep in mind the design principles that we discussed on Monday rega
 
 # Deliverable
 
-Your knitted .Rmd file (i.e., the HTML output).
+Your knitted .qmd file (i.e., the HTML output).
 

@@ -314,10 +314,14 @@ be clear about your definition)
 <li>Time of Day: are some destinations from PDX “morning” destinations
 vs “evening” ones?</li>
 </ul>
-<p><em>Note:</em> For some of these questions, you may need to make
+<div id="note-about-planning-your-analyses" class="section level2"
+number="1.1">
+<h2><span class="header-section-number">1.1</span> Note about planning
+your analyses</h2>
+<p>For some of these questions, you may need to make
 editorial/analytical choices about what data to include, how to define
 metrics, etc. For example, it may be the case that improvement/decline
-in timeliness may be tricky to measure, as naïve approachces may be
+in timeliness may be tricky to measure, as naïve approaches may be
 easily skewed by outliers or by variation in the data. You may choose to
 exclude certain low-volume carriers, or only include routes that are
 present throughout the entire dataset, or something else altogether.
@@ -327,17 +331,19 @@ interpretation and comprehension of your analysis.</p>
 Monday regarding spacing, use of rules, row-vs-column orientation,
 alignment, etc. In addition to the table itself, provide a short
 description of your design and its motivation.</p>
-<div id="things-to-consider" class="section level2" number="1.1">
-<h2><span class="header-section-number">1.1</span> Things to
+</div>
+<div id="things-to-consider" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Things to
 consider</h2>
 <ol style="list-style-type: decimal">
 <li>For your analytical questions of choice, what measure of central
 tendency is appropriate? Does mean or median make more sense? What
 should you look at to try and answer that question?</li>
-<li>Pay attention to formatting in your tables- numbers should have
-commas in appropriate places, column headers should be human-readable,
-as opposed to just whatever the dataframe column was named (“Total
-on-time flights” as opposed to “total_on_time_flights”), etc.</li>
+<li><strong>Pay attention to formatting in your tables:</strong> numbers
+should have commas in appropriate places, column headers should be
+human-readable, as opposed to just whatever the dataframe column was
+named (“Total on-time flights” as opposed to “total_on_time_flights”),
+etc.</li>
 <li>The flight delays dataset has month as a numerical variable; does
 this make sense for display in your table?</li>
 <li>The <code>pnwflights14</code> dataset has several ancillary
@@ -383,7 +389,7 @@ if appropriate use them in a figure.</li>
 </div>
 <div id="deliverable" class="section level1" number="3">
 <h1><span class="header-section-number">3</span> Deliverable</h1>
-<p>Your knitted .Rmd file (i.e., the HTML output).</p>
+<p>Your knitted .qmd file (i.e., the HTML output).</p>
 </div>
 
 <p>
