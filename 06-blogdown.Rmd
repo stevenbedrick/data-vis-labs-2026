@@ -1,34 +1,33 @@
 ---
 title: "Week 6 - Publishing"
 author: "Steven Bedrick"
-date: "5/7/2025"
+date: "5/6/2025"
 output:
   html_document:
     theme: flatly
     number_sections: FALSE
 ---
 
-This week, you will begin working on your academic portfolio site. The deliverable for the week is a URL (on Netlify, or wherever) for a simple personal site with the following criteria:
+This week, you will begin working on your academic portfolio site. The deliverable for the week is a URL (on [Netlify](https://www.netlify.com/), or wherever) for a simple personal site with the following criteria:
 
 1. A completed "About" page, containing a short professional bio following the methods & advice given on the [course site for today](https://dmice.ohsu.edu/bedricks/courses/bmi525/syllabus/6-sixth.html)
 2. A photo (not necessarily of you)
 3. At least one stylistic aspect changed from the original template (font, color, etc.)
 4. A sub-page containing one of the visualizations that you have created for an assignment/lab in this class, with an associated description.
-5. All boilerplate (example) content that came with the theme should be removed. I am talking about things like, for example:
-    1. The "resources" section
-    2. The randomly-titled "second page"
-    3. The config settings should also be updated (e.g., the page title should not be "RMarkdown Demo" or anything like that), etc. 
-    4. _Hint_: Make sure to look in the `_site.yml` file!
+5. All boilerplate (example) content that came with the starter template should be removed or updated. I am talking about things like, for example:
+    1. The title of the site itself
+    2. The randomly-titled "about" page- this should be renamed, etc.
 
 
+## What to Turn In
 
-#### Resources
+On Sakai, give me the URL of your published Netlify site.
 
-- [Chapter 3](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style) of ["R Markdown: The Definitive Guide"](https://bookdown.org/yihui/rmarkdown/) by Xie et al. has a section on themes
-- [Chapter 10](https://bookdown.org/yihui/rmarkdown/websites.html) of the same book has a detailed discussion of the workflow for a simple website.
-  - See specifically section [10.5](https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html#rmarkdown-site) for info about RMarkdown's built-in static site generator.
-  - Of particular interest is the section on [the `navbar` part](https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html#site-navigation) of `_site.yml`
-- [Julia Lowndes's RMarkdown Tutorial](https://jules32.github.io/rmarkdown-website-tutorial/basic_workflow.html) is a good overview of a possible workflow
-- If you find yourself feeling stifled by how simplistic RMarkdown's functionality is, you may wish to check out:
-  - [Quarto](https://quarto.org/docs/websites/), which has support for more complex sites
-  - [Blogdown](https://bookdown.org/yihui/blogdown/), which is even more involved
+### Resources
+
+- [Netlify](https://www.netlify.com/) is a free service that is a great choice for hosting a simple personal webpage
+  - Quarto can [automatically publish](https://quarto.org/docs/publishing/netlify.html) your project to Netlify.
+  - I have verified that the `quarto publish netlify` workflow described in the Quarto guide will work on Posit.cloud, assuming that you have already made a Netlify account.
+  - Make sure you run `quarto` commands from the **terminal** tab in Posit.cloud, _not_ the **R console** tab.
+- The ["Website Theme](https://quarto.org/docs/websites/index.html#website-theme) of the ["Creating a Website"](https://quarto.org/docs/websites/) section of the Quarto guide has details about available themes.
+
