@@ -67,7 +67,7 @@ Like vector data, raster data files generally contain metadata situating the pix
 Here's the data from the City of Portland park tree inventory, in CSV format:
 
 ```{r loading trees csv, message=FALSE, warning=FALSE}
-trees_raw <- read_csv("data/lab08/Parks_Tree_Inventory.csv")
+trees_raw <- read_csv("data/lab07/Parks_Tree_Inventory.csv")
 glimpse(trees_raw)
 ```
 
@@ -92,7 +92,7 @@ As such, we generally prefer to work with vector file formats such as ESRI's Sha
 The Portland Maps Open Data site allows us to download data in ESRI's format; let's take a look, using the `sf` package's `st_read` function:
 
 ```{r loading trees shapefile, message=FALSE, warning=FALSE}
-trees_shape <- st_read("data/lab08/Parks_Tree_Inventory-shp")
+trees_shape <- st_read("data/lab07/Parks_Tree_Inventory-shp")
 ```
 
 Looking at the diagnostic output produced by `st_read()`, we can see a few useful things about the data we have just loaded: the number of features (rows), the number of attributes (columns), what kind of geometry we are working with (points, as opposed to polygons), and, best of all, some details about the geospatial context of the data. 
@@ -124,7 +124,7 @@ In practice, it is relatively rare that we need to dig directly into that column
 Our first map will be a simple one, showing the various neighborhood boundaries in Portland.
 
 ```{r loading our spatial data, warning=FALSE, message=FALSE, results='hide'}
-pdx_boundaries <- st_read("data/lab08//Neighborhoods__Regions_-shp")
+pdx_boundaries <- st_read("data/lab07/Neighborhoods__Regions_-shp")
 ```
 Note that this file's geometry type is a "multipolyhgon".
 This is an extension of a polygon such that a single feature can consist of multiple polygons, which is important for things like administrative boundaries which sometimes have complicated shapes or are otherwise non-contiguous.
@@ -132,7 +132,7 @@ This is an extension of a polygon such that a single feature can consist of mult
 Next, we will also load a second shapefile, that includes the geography of the Willamette and Columbia rivers:
 
 ```{r loading river, warning=FALSE, message=FALSE, results='hide'}
-river_boundaries <- st_read("data/lab08//Willamette_Columbia_River_Ordinary_High_Water-shp/")
+river_boundaries <- st_read("data/lab07/Willamette_Columbia_River_Ordinary_High_Water-shp/")
 ```
 
 Once we have loaded the shapefiles, we have many options. The built-in base-R `plot` function can handle these, as can `ggplot` via `sf`'s `geom_sf`:
@@ -273,11 +273,25 @@ Let's walk through how to use `sf_project()`. First, we'll need a point in WGS84
 p1 <- data.frame(lon=c(-122.65), lat=c(45.5))
 ```
 
-Next, we figure out the EPSG numbers for our source and target CRS. Our source CRS is WGS84, whose CRS number is 4326; let's say that we wanted to project it into the space that the Portland Maps data is using, so that we could overlay the points or do some sort of distance calculation. The Portland Maps dataset uses EPSG 3857, also known as "Web Mercator". This is basically WGS84, but it has been "quasi-Mercator projected," and converted to use meters as units and easting/northing as its direction system (instead of lat/long). 
+Note that, at this point, `p1` is just a regular dataframe, without any geospatial information. _We_ know that it contains coordinate points on the WGS84 ellipsoid, but nobody _else_ looking at those points (including any R functions) will, so we have some work to do before we can actually use this point for anything.
 
-Web Mercator is used by a variety of mapping software packages (including Google Maps, etc.), hence why it's what Portland Maps gives. The motivation behind Web Mercator is that it depends on a spherical projection geometry (rather than the ellipsoidal projection used by vanilla Mercator). This makes it vastly simpler to work with from a computational perspective... at the cost of substantially decreased accuracy at northern latitudes, even by Mercator standards. For this reason, the metadata includes a `USAGE` note saying that it is only specified for use at latitudes between 85º N and 85º S. In practice, it is best to not push things even that far; you'll see notable distortion by the time you get to Norway and Alaska. 
+We begin by figuring out the EPSG numbers for our source and target CRS. 
+Our source CRS is WGS84, whose CRS number is `4326`; let's say that we wanted to project it into the same space used by our dataset of Portland neighborhood boundaries, so that we could overlay the points or do some other sort of calculation. The Portland neighborhood maps dataset uses EPSG `3857`, also known as "Web Mercator". This is basically WGS84, but it has been "quasi-Mercator projected," and converted to use meters as units and easting/northing as its direction system (instead of lat/long). 
 
-Anyway now that we know which CRS systems are in play, we can use `sf_project()`:
+<div class="panel panel-info">
+  <div class="panel-heading">Web Mercator? WTF?</div>
+  <div class="panel-body">
+
+For better or worse, Web Mercator is a very important CRS to become familiar with, as it is used by a variety of mapping software packages (including Google Maps, etc.), and is also the CRS used by the City of Portland's geospatial data portal. 
+The motivation behind Web Mercator is that it depends on a _spherical_ projection geometry (rather than the _ellipsoidal_ projection used by "vanilla" Mercator). This makes it vastly simpler to work with from a computational perspective... at the cost of substantially decreased accuracy at northern latitudes, even by the questionable standards of the Mercator projection. 
+
+For this reason, the CRS's metadata includes a `USAGE` note saying that it is only specified for use at latitudes between 85º N and 85º S. In practice, it is best to not push things even that far; you'll see notable distortion by the time you get to Norway and Alaska. 
+
+  </div>
+</div>
+
+
+Now that we know which CRS systems are in play, we can use `sf_project()` to convert our "raw" WGS84 spherical coordinates into projected Web Mercator coordinates:
 
 ```{r projection example}
 sf_project(
@@ -299,7 +313,7 @@ sf_project(
 
 ```
 
-Another common way to define a CRS is with a "`PROJ.4`" string. Instead of referring to a standard, predefined projection as with an EPSG code, the proj.4 string includes all of the necessary information to describe an arbitrary projection. Consider this example, from the `geom_sf` documentation:
+Besides specifying a CRS by its EPSG nubmer, another common way to define a CRS is with a "`PROJ.4`" string. Instead of referring to a standard, predefined projection as with an EPSG code, the proj.4 string includes all of the necessary information to describe an arbitrary projection. Consider this example, from the `geom_sf` documentation:
 
 ```{r}
 world1 <- sf::st_as_sf(map('world', plot = FALSE, fill = TRUE))
@@ -339,9 +353,9 @@ Pick a different_ projection, and show how it looks with at least _two_ differen
 Now that we can draw a base map, it's time to try plotting some data. Let's load up the tree census, farmer's marker, and grocery store data sets.
 
 ```{r loading feature files, warning=FALSE, message=FALSE, results='hide'}
-trees_shape <- st_read("data/lab08/Parks_Tree_Inventory-shp")
-farmers_market <- st_read("data/lab08/Farmers_Markets-shp/")
-grocery_stores <- st_read("data/lab08/Grocery_Stores-shp/")
+trees_shape <- st_read("data/lab07/Parks_Tree_Inventory-shp")
+farmers_market <- st_read("data/lab07/Farmers_Markets-shp/")
+grocery_stores <- st_read("data/lab07/Grocery_Stores-shp/")
 
 ```
 
@@ -400,9 +414,32 @@ pdx_boundaries %>% ggplot() +geom_sf() +
   theme_minimal()
 ```
 
-Note that for exploring this part of the data, we may wish to bring in additional layers- perhaps the routes of I-5 and I-205. Other major arterial roads may also be important (Foster, Powell, and 82nd on the East side come to mind, as does Barbur and Capitol Highway on the West side). 
+Note that for exploring this part of the data, we may wish to bring in additional layers- perhaps the routes of I-5 and I-205. Other major arterial roads may also be important (Foster, Powell, and 82nd on the East side come to mind, as do Barbur and Capitol Highway on the West side). 
 
-With this many data points, it may begin to make sense to look not at discrete points but rather at a density or contour plot. Making this is a tiny bit more complicated, since the `X` and `Y` columns in this particular data set do not seem to be in the same coordinate system, and it is not entirely obvious from the Portland Maps site what system those columns are in. 😣 Fortunately, the points in the `$geometry` column are just fine, and we can extract those using `st_coordinates` for use by `stat_density_2d`:
+With this many data points, it may begin to make sense to look not at discrete points but rather at a density or contour plot. In ggplot, the easiest way to do this is with the `stat_density_2d` geom, but with geospatial dataframes there is a complication: this geom needs the coordinates for each datapoint to be separated into two columns (to map to the `x` and `y` aesthetics), and our dataframe is full of `sf` points.
+
+<div class="panel panel-warning">
+  <div class="panel-heading">What about the existing `X` and `Y` columns?</div>
+  <div class="panel-body">
+If you look closely at our `grocery_stores` dataframe, you might notice that in addition to the `geometry` column used by `geom_sf`, we also have `X` and `Y` columns.
+Obviously, these are the coordinates for each of our grocery stores, but... in what CRS?
+    
+This is an example of a common problem with geospatial data: since we don't know the coordinate system that these columns are using, they are useless for our current purpose! 😣
+
+In this case, with enough detective work, we can use the [dataset's metadata](https://www.portlandmaps.com/metadata/index.cfm?&action=DisplayLayer&LayerID=54182) to work out what those columns mean: they are coordinates in the [State Plane Coordinate System](https://en.wikipedia.org/wiki/State_Plane_Coordinate_System), measured in feet.
+
+From here, if you _really_ needed to, you would be able to convert these points into the CRS used by the rest of our data...
+  </div>
+</div>
+
+Rather than using the "mystery" `X` and `Y` columns, we can use the geospatially-tagged data in the `geometry` column, from which we can extract "normal" R numeric data using `st_coordinates`:
+
+```{r}
+grocery_stores$geometry %>% head %>% st_coordinates
+```
+Note that these are clearly Web Mercator-projected coordinates, just like we need for our map and for stat_density_2d!
+
+From here, we can feed these points directly to `stat_density_2d`:
 
 ```{r grocery contour}
 pdx_boundaries %>% ggplot() +
@@ -411,7 +448,7 @@ pdx_boundaries %>% ggplot() +
   geom_sf(data=grocery_stores, color=scales::alpha("seagreen", 0.45)) +
   stat_density_2d(
     data=data.frame(st_coordinates(grocery_stores$geometry)), 
-    mapping=aes(X,Y), 
+    mapping=aes(X,Y), # remember. this aesthetic mapping is "local" to this geom
     color="red", 
     alpha=0.5)  +
   ggtitle("Portland Grocery Stores") +
@@ -549,7 +586,7 @@ register_stadiamaps("e8736240-6bd5-4531-9a62-2418120de3d9", write=FALSE)
 
 Once we've done that, we may begin using `ggmap`. We generate a basemap using `get_stadiamap()` (there are related functions for different tile sets).
 
-```{r}
+```{r,message=FALSE}
 park_base_map <- get_stadiamap(
   c(left=-122.725, bottom=45.4675, right=-122.7125, top=45.478), # note: in practice, we wouldn't enter these by hand, we would use st_bbox() or something similar!
   zoom=16,
@@ -557,7 +594,12 @@ park_base_map <- get_stadiamap(
 ggmap(park_base_map)
 ```
 
-Now, we are ready to try plotting the trees over our base map. Our trees and basemap are in different projections, and `ggmap` can't quite handle that situation "on its own". We must manually re-project our trees' locations:
+Now, we are ready to try plotting the trees over our base map. Our trees and basemap are in different projections, and `ggmap` can't quite handle that situation "on its own":
+
+- The trees, coming from the city's geodata portal, are _projected_ Web Mercator coordinates 
+- `ggmap` wants _unprojected_ WGS84 coordinates.
+
+We can use `st_transform` to manually re-project our trees' locations:
 
 ```{r, warning=FALSE, message=FALSE}
 # ggmap isn't smart enough to reproject, so we need to by hand
@@ -677,7 +719,7 @@ For this example, however, we will manually align the names between the two data
 
 ```{r}
 # pull data out of the Excel file, by cell range
-pdx_population <- read_excel("data/lab08/Census_2010_Data_Cleanedup.xlsx",
+pdx_population <- read_excel("data/lab07/Census_2010_Data_Cleanedup.xlsx",
                              sheet="Census_2010_Neighborhoods", 
                              range="A7:B101", 
                              col_names = c("Neighborhood", "Total.Pop")) %>%   
