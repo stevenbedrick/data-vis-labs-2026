@@ -29,7 +29,7 @@ This is the site for sharing our Data Visualization Labs for BMI 5/625 at Oregon
     - [Data Tidying Tricks for Tables](05-tables-tidying.html)
 - [Lab 06: Publishing](06-blogdown.html)
 - [Lab 07: Maps](07-maps.html)
-<!-- - [Lab 08: Shiny](08-shiny.html) -->
+- [Lab 08: Shiny](08-shiny.html)
 
 <!-- - [Lab 10: Higher-dimensionality and Networks](10-high-d.html) -->
 <!-- - [Bonus "Lab 11": JSON Walkthrough](11-json.html) -->
