@@ -1,5 +1,5 @@
 ---
-title: 'Lab 07: Interactive Vis With Shiny'
+title: 'Lab 08: Interactive Vis With Shiny'
 author: "Steven Bedrick"
 subtitle: BMI 5/625
 always_allow_html: true
@@ -25,6 +25,7 @@ knitr::opts_chunk$set(error = TRUE, comment = NA, warning = FALSE, errors = FALS
 ```{r echo=FALSE}
 library(shiny)
 library(tidyverse)
+# devtools::install_github("kbodwin/flair")
 library(flair)
 library(rmarkdown) 
 library(babynames)
@@ -131,12 +132,6 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r, echo=FALSE}
-# decorate("firstServerSide", eval=FALSE) %>% 
-#   flair("textOutput") %>% 
-#   flair("renderText") #%>% 
-#   # knit_print.with_flair()
-```
 
 There are a few new pieces here:
 
@@ -148,9 +143,6 @@ There are corresponding `*Output` elements (and `render*()` functions) for image
 
 The other important thing to notice in this example is that we are giving our UI element an _identifier_, "`timestamp`", which we then use later in the server function.
 
-```{r, echo=FALSE}
-# decorate("firstServerSide", eval=FALSE) %>% flair("timestamp") # %>% knit_print.with_flair()
-```
 
 This is a key pattern in Shiny. A way to think about it is that the element IDs are _links_ that let the front-end and back-end communicate with one another. When you run this application, you should see something like this:
 
@@ -224,9 +216,7 @@ server <- function(input, output, session) {
     )
 }
 ```
-```{r, echo=FALSE}
-# decorate("firstInput", eval=FALSE) %>% flair("input") #  %>% knit_print.with_flair()
-```
+
 
 Try adding this line to your server function, and run the application. You should see something like this:
 
@@ -314,9 +304,6 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r, echo=FALSE}
-#decorate("firstPlot", eval=FALSE) %>% flair("plotOutput") %>% flair("renderPlot") #%>% knit_print.with_flair()
-```
 
 `plotOutput` can take display figures made with either `plot()` or `ggplot()`.
 
@@ -373,9 +360,6 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 ```
 
-```{r, echo=FALSE}
-#decorate("withTable", eval=FALSE) %>% flair("tableOutput") %>% flair("renderTable") %>% flair("nameTable") #%>% knit_print.with_flair()
-```
 
 ```{r withTableToDisplay, eval=T, echo=F}
 library(shiny)
@@ -470,9 +454,6 @@ server <- function(input, output, session) {
 
 shinyApp(ui = ui, server = server)
 ```
-```{r, echo=FALSE}
-#decorate("withGtTable", eval=FALSE) %>% flair("render_gt") %>% flair("gt_output") %>% flair("nameTable")#  %>% # knit_print.with_flair()
-```
 
 # Organizing our app
 
@@ -521,9 +502,6 @@ server <- function(input, output, session) {
 
 shinyApp(ui = ui, server = server)
 ```
-```{r, echo=FALSE}
-#decorate("encapsulatingFunctions", eval=FALSE) %>% flair("makePlot") %>% flair("makeTable") # %>% knit_print.with_flair()
-```
 
 Note that the functions that make the plot and the table do not directly reference the `input` variable provided by Shiny- they would work just fine "one their own", independent of whether we  were using Shiny or not. Similarly, the parts of the application  responsible for handling input and output via Shiny (i.e., `textInput`, `renderPlot`) do not need to concern themselves with the details of what might be involved in generating the plots.
 
@@ -543,9 +521,6 @@ ui <- fluidPage(
   )
 )
 ```
-```{r, echo=FALSE}
-#decorate("origCols", eval=FALSE) %>% flair("fluidRow") %>% flair("column") # %>% knit_print.with_flair()
-```
 
 Between `fluidRow()` and `column()`, you can put together pretty much any layout you might want, but a useful shortcut may be to use the `sidebarLayout()` function:
 
@@ -562,9 +537,6 @@ ui <- fluidPage(
     )
   )
 )
-```
-```{r, echo=FALSE}
-#decorate("sidebarLayoutExample", eval=FALSE) %>% flair("sidebarLayout") %>% flair("sidebarPanel") %>% flair("mainPanel") # %>% knit_print.with_flair()
 ```
 
 `sidebarLayout()` is one of several built-in layout helper functions in Shiny, and can be used to quickly build a more complex interface. Note that in the screenshot below, our "sidebar" is actually being placed _above_ the plot; in reality, pages using `sidebarLayout` will be _responsive_ to the window size in which they are viewed. In a narrower window (or on a phone) it will automatically reflow to a vertical layout.
@@ -637,9 +609,6 @@ ui <- fluidPage(
         column(6, gt_output("nameTable"))
     )
 )
-```
-```{r, echo=F}
-#decorate("selectInput", eval=FALSE) %>% flair("selectInput") # %>% knit_print.with_flair()
 ```
 
 
@@ -787,9 +756,6 @@ ui <- fluidPage(
     )
 )
 ```
-```{r echo=F}
-#decorate("firstReactiveUI") %>% flair("numericInput") %>% flair("c()") # %>% knit_print.with_flair()
-```
 
 We've added a new input control, which will only allow numeric input that is within a certain range. We've also stopped manually specifying our select box options, since we want the list to be dynamic: it should contain the top ten names _for the selected year_. We need to somehow connect the `numericInput` box that we have created to the `selectInput`. We'll do this in the server function:
 
@@ -814,9 +780,6 @@ server <- function(input, output, session) {
     # note: don't forget the code to actually make the plot and table!
   
 }    
-```
-```{r echo=F}
-#decorate("firstReactiveServer") %>% flair("reactive") %>% flair("observeEvent")#  %>% knit_print.with_flair()
 ```
 
 There are two new things here. First is the use of the `reactive()` function, which sets up a new variable that Shiny will be in charge of. Any R variable that we want to either _use_ or _be used by_ a Shiny component must be wrapped in a `reactive()` call. In this case, our list of names depends on (i.e., is using) `input$year`, so we have to make it reactive.
@@ -903,7 +866,7 @@ Understanding `reactive()` is key to being able to use Shiny; I _strongly_ recom
 
 # Deployment
 
-See the [shinyapps.io user guide](https://docs.rstudio.com/shinyapps.io/) for information about deploying a simple Shiny app.
+See the [deployment section](https://docs.posit.co/shinyapps.io/guide/getting_started/#deploying-applications) of the [shinyapps.io user guide](https://docs.rstudio.com/shinyapps.io/) for information about deploying a simple Shiny app.
 
 # Deliverable
 

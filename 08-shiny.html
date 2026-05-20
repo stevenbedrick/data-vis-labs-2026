@@ -12,9 +12,9 @@
 <meta name="author" content="Steven Bedrick" />
 
 
-<title>Lab 07: Interactive Vis With Shiny</title>
+<title>Lab 08: Interactive Vis With Shiny</title>
 
-<script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.31/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -342,14 +342,13 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Lab 07: Interactive Vis With Shiny</h1>
+<h1 class="title toc-ignore">Lab 08: Interactive Vis With Shiny</h1>
 <h3 class="subtitle">BMI 5/625</h3>
 <h4 class="author">Steven Bedrick</h4>
 
 </div>
 
 
-<pre><code>Error in library(flair): there is no package called &#39;flair&#39;</code></pre>
 <div id="introduction" class="section level1" number="1">
 <h1><span class="header-section-number">1</span> Introduction</h1>
 <p><code>Shiny</code> is a powerful R library for making interactive web
@@ -422,7 +421,7 @@ server &lt;- function(input, output, session) {
 shinyApp(ui = ui, server = server)</code></pre>
 <p>Try putting this in your <code>app.R</code> and run it. You should
 see something like this:</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-5-1.png" alt="" width="672" /></p>
 <p>Note above the <code>titlePanel()</code> function. This is a function
 whose output is HTML:</p>
 <pre class="r"><code>titlePanel(&quot;Hello, world!&quot;)</code></pre>
@@ -469,7 +468,7 @@ which we then use later in the server function.</p>
 element IDs are <em>links</em> that let the front-end and back-end
 communicate with one another. When you run this application, you should
 see something like this:</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-8-1.png" alt="" width="672" /></p>
 <p>If you reload the page in your web browser, you should see that the
 timestamp has been updated- it is recalculated <em>dynamically</em> each
 time the page is requested.</p>
@@ -502,7 +501,7 @@ values), etc. (See the <a
 href="https://shiny.rstudio.com/gallery/widget-gallery.html">Shiny
 Widgets Gallery</a> for examples of each of the available controls).</p>
 <p>When we run this application, we should see something like this:</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-10-1.png" alt="" width="672" /></p>
 <p>Try typing in the text field. You’ll see that the <em>front-end</em>
 of the site is working (it’s a text field, you can add text, copy and
 paste, etc.) but that nothing is happening in response to your input,
@@ -522,9 +521,9 @@ output back via <code>renderText()</code>:</p>
 }</code></pre>
 <p>Try adding this line to your server function, and run the
 application. You should see something like this:</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-11-1.png" alt="" width="672" /></p>
 <p>What happens if you type your name in the text box?</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-12-1.png" alt="" width="672" /></p>
 <p>Note that the contents of the UI automatically updates when fields
 change. Shiny uses a <em>reactive</em> programming model, in which
 elements on the page automatically react to one another when they
@@ -546,7 +545,7 @@ a particular name, split by sex:</p>
             ggplot(mapping=aes(x=year, y=prop, color=sex)) + 
             geom_line() + 
             ggtitle(&quot;Name Frequency: Steven&quot;)</code></pre>
-<p><img src="07-shiny_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-13-1.png" alt="" width="672" /></p>
 <p>Nothing fancy, but that’s fine- let’s get it into our Shiny
 application. We will use the
 <code>plotOutput</code>/<code>renderPlot</code> function dyad:</p>
@@ -629,7 +628,7 @@ server &lt;- function(input, output, session) {
 }
 
 shinyApp(ui = ui, server = server)</code></pre>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/withTableToDisplay-1.png" alt="" width="672" /></p>
 <p>This is kind of basic-looking, but can be customized as much as one
 might wish, using any of the table formatting techniques we discussed
 earlier in the term. Notably, the <code>gt</code> package includes some
@@ -647,23 +646,23 @@ from above:</p>
     fmt_number(columns=c(prop), decimals=5) %&gt;% 
     tab_header(title=&quot;Year of Maximum Steven, by sex assigned at birth&quot;)  %&gt;% 
     tab_source_note(md(&quot;From `babynames` package&quot;))</code></pre>
-<div id="vgrgvntpbf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#vgrgvntpbf table {
+<div id="sgqeqqxdhj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#sgqeqqxdhj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#vgrgvntpbf thead, #vgrgvntpbf tbody, #vgrgvntpbf tfoot, #vgrgvntpbf tr, #vgrgvntpbf td, #vgrgvntpbf th {
+#sgqeqqxdhj thead, #sgqeqqxdhj tbody, #sgqeqqxdhj tfoot, #sgqeqqxdhj tr, #sgqeqqxdhj td, #sgqeqqxdhj th {
   border-style: none;
 }
 
-#vgrgvntpbf p {
+#sgqeqqxdhj p {
   margin: 0;
   padding: 0;
 }
 
-#vgrgvntpbf .gt_table {
+#sgqeqqxdhj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -689,12 +688,12 @@ from above:</p>
   border-left-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_caption {
+#sgqeqqxdhj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#vgrgvntpbf .gt_title {
+#sgqeqqxdhj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -706,7 +705,7 @@ from above:</p>
   border-bottom-width: 0;
 }
 
-#vgrgvntpbf .gt_subtitle {
+#sgqeqqxdhj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -718,7 +717,7 @@ from above:</p>
   border-top-width: 0;
 }
 
-#vgrgvntpbf .gt_heading {
+#sgqeqqxdhj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -730,13 +729,13 @@ from above:</p>
   border-right-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_bottom_border {
+#sgqeqqxdhj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_col_headings {
+#sgqeqqxdhj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -751,7 +750,7 @@ from above:</p>
   border-right-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_col_heading {
+#sgqeqqxdhj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -771,7 +770,7 @@ from above:</p>
   overflow-x: hidden;
 }
 
-#vgrgvntpbf .gt_column_spanner_outer {
+#sgqeqqxdhj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -783,15 +782,15 @@ from above:</p>
   padding-right: 4px;
 }
 
-#vgrgvntpbf .gt_column_spanner_outer:first-child {
+#sgqeqqxdhj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#vgrgvntpbf .gt_column_spanner_outer:last-child {
+#sgqeqqxdhj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#vgrgvntpbf .gt_column_spanner {
+#sgqeqqxdhj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -803,11 +802,11 @@ from above:</p>
   width: 100%;
 }
 
-#vgrgvntpbf .gt_spanner_row {
+#sgqeqqxdhj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#vgrgvntpbf .gt_group_heading {
+#sgqeqqxdhj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -833,7 +832,7 @@ from above:</p>
   text-align: left;
 }
 
-#vgrgvntpbf .gt_empty_group_heading {
+#sgqeqqxdhj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -848,15 +847,15 @@ from above:</p>
   vertical-align: middle;
 }
 
-#vgrgvntpbf .gt_from_md > :first-child {
+#sgqeqqxdhj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#vgrgvntpbf .gt_from_md > :last-child {
+#sgqeqqxdhj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#vgrgvntpbf .gt_row {
+#sgqeqqxdhj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -875,7 +874,7 @@ from above:</p>
   overflow-x: hidden;
 }
 
-#vgrgvntpbf .gt_stub {
+#sgqeqqxdhj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -888,7 +887,7 @@ from above:</p>
   padding-right: 5px;
 }
 
-#vgrgvntpbf .gt_stub_row_group {
+#sgqeqqxdhj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -902,15 +901,15 @@ from above:</p>
   vertical-align: top;
 }
 
-#vgrgvntpbf .gt_row_group_first td {
+#sgqeqqxdhj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#vgrgvntpbf .gt_row_group_first th {
+#sgqeqqxdhj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#vgrgvntpbf .gt_summary_row {
+#sgqeqqxdhj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -920,16 +919,16 @@ from above:</p>
   padding-right: 5px;
 }
 
-#vgrgvntpbf .gt_first_summary_row {
+#sgqeqqxdhj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_first_summary_row.thick {
+#sgqeqqxdhj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#vgrgvntpbf .gt_last_summary_row {
+#sgqeqqxdhj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -939,7 +938,7 @@ from above:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_grand_summary_row {
+#sgqeqqxdhj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -949,7 +948,7 @@ from above:</p>
   padding-right: 5px;
 }
 
-#vgrgvntpbf .gt_first_grand_summary_row {
+#sgqeqqxdhj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -959,7 +958,7 @@ from above:</p>
   border-top-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_last_grand_summary_row_top {
+#sgqeqqxdhj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -969,11 +968,11 @@ from above:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_striped {
+#sgqeqqxdhj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#vgrgvntpbf .gt_table_body {
+#sgqeqqxdhj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -982,7 +981,7 @@ from above:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_footnotes {
+#sgqeqqxdhj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -996,7 +995,7 @@ from above:</p>
   border-right-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_footnote {
+#sgqeqqxdhj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1005,7 +1004,7 @@ from above:</p>
   padding-right: 5px;
 }
 
-#vgrgvntpbf .gt_sourcenotes {
+#sgqeqqxdhj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1019,7 +1018,7 @@ from above:</p>
   border-right-color: #D3D3D3;
 }
 
-#vgrgvntpbf .gt_sourcenote {
+#sgqeqqxdhj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1027,72 +1026,72 @@ from above:</p>
   padding-right: 5px;
 }
 
-#vgrgvntpbf .gt_left {
+#sgqeqqxdhj .gt_left {
   text-align: left;
 }
 
-#vgrgvntpbf .gt_center {
+#sgqeqqxdhj .gt_center {
   text-align: center;
 }
 
-#vgrgvntpbf .gt_right {
+#sgqeqqxdhj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#vgrgvntpbf .gt_font_normal {
+#sgqeqqxdhj .gt_font_normal {
   font-weight: normal;
 }
 
-#vgrgvntpbf .gt_font_bold {
+#sgqeqqxdhj .gt_font_bold {
   font-weight: bold;
 }
 
-#vgrgvntpbf .gt_font_italic {
+#sgqeqqxdhj .gt_font_italic {
   font-style: italic;
 }
 
-#vgrgvntpbf .gt_super {
+#sgqeqqxdhj .gt_super {
   font-size: 65%;
 }
 
-#vgrgvntpbf .gt_footnote_marks {
+#sgqeqqxdhj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#vgrgvntpbf .gt_asterisk {
+#sgqeqqxdhj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#vgrgvntpbf .gt_indent_1 {
+#sgqeqqxdhj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#vgrgvntpbf .gt_indent_2 {
+#sgqeqqxdhj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#vgrgvntpbf .gt_indent_3 {
+#sgqeqqxdhj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#vgrgvntpbf .gt_indent_4 {
+#sgqeqqxdhj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#vgrgvntpbf .gt_indent_5 {
+#sgqeqqxdhj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#vgrgvntpbf .katex-display {
+#sgqeqqxdhj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#vgrgvntpbf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#sgqeqqxdhj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1266,7 +1265,7 @@ being placed <em>above</em> the plot; in reality, pages using
 <code>sidebarLayout</code> will be <em>responsive</em> to the window
 size in which they are viewed. In a narrower window (or on a phone) it
 will automatically reflow to a vertical layout.</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-16-1.png" alt="" width="672" /></p>
 </div>
 <div id="other-controls" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> Other controls</h1>
@@ -1282,7 +1281,7 @@ restrict them to a pre-set list of names?</p>
         column(6, gt_output(&quot;nameTable&quot;))
     )
 )</code></pre>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-17-1.png" alt="" width="672" /></p>
 <p>Of course, there’s nothing saying that this list has to be
 manually-entered! Imagine if we wanted it to be set to the top ten names
 in 2017:</p>
@@ -1300,7 +1299,7 @@ ui &lt;- fluidPage(
         column(6, gt_output(&quot;nameTable&quot;))
     )
 )</code></pre>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-18-1.png" alt="" width="672" /></p>
 <p>This is a very powerful pattern for creating dynamic tables and
 plots!</p>
 </div>
@@ -1357,7 +1356,7 @@ a <code>reactive()</code> call. In this case, our list of names depends
 on (i.e., is using) <code>input$year</code>, so we have to make it
 reactive.</p>
 <p>What does it look like?</p>
-<div style="width: 100% ; height: 400px ; text-align: center; box-sizing: border-box; -moz-box-sizing: border-box; -webkit-box-sizing: border-box;" class="muted well">Shiny applications not supported in static R Markdown documents</div>
+<p><img src="08-shiny_files/figure-html/unnamed-chunk-19-1.png" alt="" width="672" /></p>
 <p><strong>Try it out</strong>: What happens if we <em>don’t</em> wrap
 our code here in <code>reactive()</code>?</p>
 <p>Once our list of common names has been made reactive, we can wire it
@@ -1374,8 +1373,11 @@ relatively concise description of what is going on.</p>
 </div>
 <div id="deployment" class="section level1" number="6">
 <h1><span class="header-section-number">6</span> Deployment</h1>
-<p>See the <a href="https://docs.rstudio.com/shinyapps.io/">shinyapps.io
-user guide</a> for information about deploying a simple Shiny app.</p>
+<p>See the <a
+href="https://docs.posit.co/shinyapps.io/guide/getting_started/#deploying-applications">deployment
+section</a> of the <a
+href="https://docs.rstudio.com/shinyapps.io/">shinyapps.io user
+guide</a> for information about deploying a simple Shiny app.</p>
 </div>
 <div id="deliverable" class="section level1" number="7">
 <h1><span class="header-section-number">7</span> Deliverable</h1>
