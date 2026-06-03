@@ -288,6 +288,8 @@ Computing Systems. Yokohama Japan: ACM; 2021. p. 1–14.</p>
 <p>The associated data can be found <a
 href="https://www.speechinteraction.org/TNG/">here</a> (and is on
 Posit.cloud).</p>
+<p><strong>Note:</strong> There is no deliverable for this lab; follow
+along and experiment at your leisure!</p>
 </div>
 <div id="setup" class="section level1">
 <h1>Setup</h1>
@@ -621,16 +623,72 @@ j6</code></pre>
 ## 12 104        4            &lt;chr [1]&gt; &lt;list [1]&gt;
 ## 13 104        45           &lt;chr [1]&gt; &lt;list [1]&gt;
 ## 14 104        54           &lt;chr [1]&gt; &lt;list [1]&gt;</code></pre>
-<p>Note the length of some of the entries in the <code>type</code>
-column- utterance 363 in espisode 102 has length 3. Looking at the JSON
-file, we can see that this is because this utterance was assigned three
-types- “Wake word”, “Conversation”, and “Question”.</p>
-<p>Because the “type” column is itself a container JSON element (a
-list), we actually will need to <code>unnest</code> it twice. This is
-the sort of thing that <code>jsonlite</code> has helpers to do, but for
-a simple file format like this one I personally usually just do it all
-by hand, so I can be sure about what’s going on.</p>
-<pre class="r"><code>j7 &lt;- j6 %&gt;% unnest(char_type) %&gt;% unnest(type) %&gt;% unnest(type)
+<p>Notice that <code>char_type</code> and <code>type</code> are list
+columns, with <code>char_type</code> always being of length 1 and
+<code>type</code> being of varying lengths. In our original data,
+<code>char_type</code> was a <code>scalar</code>, not a list: we ended
+up with it as a list because of a quirk of how our raw JSON parse was
+processed and enframed. We can easily deal with this via
+<code>unnest</code>:</p>
+<pre class="r"><code>j6 &lt;- j6 %&gt;% unnest(char_type)
+j6</code></pre>
+<pre><code>## # A tibble: 14 × 4
+##    episode.id utterance.id char_type type      
+##    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;list&gt;    
+##  1 102        255          Person    &lt;list [1]&gt;
+##  2 102        345          Person    &lt;list [1]&gt;
+##  3 102        347          Person    &lt;list [1]&gt;
+##  4 102        363          Person    &lt;list [3]&gt;
+##  5 102        421          Person    &lt;list [1]&gt;
+##  6 102        422          Computer  &lt;list [1]&gt;
+##  7 102        426          Computer  &lt;list [2]&gt;
+##  8 102        427          Person    &lt;list [2]&gt;
+##  9 102        428          Computer  &lt;list [2]&gt;
+## 10 102        429          Computer  &lt;list [2]&gt;
+## 11 102        430          Person    &lt;list [2]&gt;
+## 12 104        4            Person    &lt;list [1]&gt;
+## 13 104        45           Person    &lt;list [1]&gt;
+## 14 104        54           Person    &lt;list [1]&gt;</code></pre>
+<p>Now, let’s turn to the <code>type</code> column. Look at the entry
+for utterance 363 in espisode 102: it has a length of 3. Looking at the
+JSON file, we can see that this is because this utterance was assigned
+three types- “Wake word”, “Conversation”, and “Question”.</p>
+<p>Because the “type” column’s JSON origin was as a container element (a
+list), which in principle could have had entries of varying types, R has
+given it to us as an R list (which can have varying contents) rather
+than as vector (which can only have one kind of data). <em>We</em> know
+what is in that list, but R doesn’t.</p>
+<p>As such, we have a little bit of extra work to do; we actually will
+need to <code>unnest</code> it <em>twice</em>:</p>
+<ul>
+<li>The <em>first</em> <code>unnest()</code> call will get it out of its
+“outer” R list</li>
+<li>The <em>second</em> <code>unnest()</code> call gets it out of its
+length-1-vector into a scalar.</li>
+</ul>
+<p>This is the sort of thing that <code>jsonlite</code> has helpers to
+do, but for a simple file format like this one I personally usually just
+do it all by hand, so I can be sure about what’s going on.</p>
+<pre class="r"><code>j7 &lt;- j6 %&gt;% unnest(type) %&gt;% unnest(type)
+j7</code></pre>
+<pre><code>## # A tibble: 21 × 4
+##    episode.id utterance.id char_type type        
+##    &lt;chr&gt;      &lt;chr&gt;        &lt;chr&gt;     &lt;chr&gt;       
+##  1 102        255          Person    Statement   
+##  2 102        345          Person    Command     
+##  3 102        347          Person    Statement   
+##  4 102        363          Person    Wake Word   
+##  5 102        363          Person    Question    
+##  6 102        363          Person    Conversation
+##  7 102        421          Person    Command     
+##  8 102        422          Computer  Response    
+##  9 102        426          Computer  Info        
+## 10 102        426          Computer  Alert       
+## # ℹ 11 more rows</code></pre>
+<p>A more modern and simpler option, that works in <em>this specific
+case</em> but might not <em>always</em> work, is to use
+<code>unnest_longer</code>:</p>
+<pre class="r"><code>j7 &lt;- j6 %&gt;% unnest_longer(type)
 j7</code></pre>
 <pre><code>## # A tibble: 21 × 4
 ##    episode.id utterance.id char_type type        
@@ -686,23 +744,23 @@ pointed at the true file:</p>
 ## ℹ Use `summarise(.groups = &quot;drop_last&quot;)` to silence this message.
 ## ℹ Use `summarise(.by = c(char_type, type))` for per-operation grouping
 ##   (`?dplyr::dplyr_by`) instead.</code></pre>
-<div id="ygzhbvpwce" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#ygzhbvpwce table {
+<div id="lcznegrdmf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lcznegrdmf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#ygzhbvpwce thead, #ygzhbvpwce tbody, #ygzhbvpwce tfoot, #ygzhbvpwce tr, #ygzhbvpwce td, #ygzhbvpwce th {
+#lcznegrdmf thead, #lcznegrdmf tbody, #lcznegrdmf tfoot, #lcznegrdmf tr, #lcznegrdmf td, #lcznegrdmf th {
   border-style: none;
 }
 
-#ygzhbvpwce p {
+#lcznegrdmf p {
   margin: 0;
   padding: 0;
 }
 
-#ygzhbvpwce .gt_table {
+#lcznegrdmf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -728,12 +786,12 @@ pointed at the true file:</p>
   border-left-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_caption {
+#lcznegrdmf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#ygzhbvpwce .gt_title {
+#lcznegrdmf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -745,7 +803,7 @@ pointed at the true file:</p>
   border-bottom-width: 0;
 }
 
-#ygzhbvpwce .gt_subtitle {
+#lcznegrdmf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -757,7 +815,7 @@ pointed at the true file:</p>
   border-top-width: 0;
 }
 
-#ygzhbvpwce .gt_heading {
+#lcznegrdmf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -769,13 +827,13 @@ pointed at the true file:</p>
   border-right-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_bottom_border {
+#lcznegrdmf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_col_headings {
+#lcznegrdmf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -790,7 +848,7 @@ pointed at the true file:</p>
   border-right-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_col_heading {
+#lcznegrdmf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -810,7 +868,7 @@ pointed at the true file:</p>
   overflow-x: hidden;
 }
 
-#ygzhbvpwce .gt_column_spanner_outer {
+#lcznegrdmf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -822,15 +880,15 @@ pointed at the true file:</p>
   padding-right: 4px;
 }
 
-#ygzhbvpwce .gt_column_spanner_outer:first-child {
+#lcznegrdmf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#ygzhbvpwce .gt_column_spanner_outer:last-child {
+#lcznegrdmf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#ygzhbvpwce .gt_column_spanner {
+#lcznegrdmf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -842,11 +900,11 @@ pointed at the true file:</p>
   width: 100%;
 }
 
-#ygzhbvpwce .gt_spanner_row {
+#lcznegrdmf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#ygzhbvpwce .gt_group_heading {
+#lcznegrdmf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -872,7 +930,7 @@ pointed at the true file:</p>
   text-align: left;
 }
 
-#ygzhbvpwce .gt_empty_group_heading {
+#lcznegrdmf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -887,15 +945,15 @@ pointed at the true file:</p>
   vertical-align: middle;
 }
 
-#ygzhbvpwce .gt_from_md > :first-child {
+#lcznegrdmf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#ygzhbvpwce .gt_from_md > :last-child {
+#lcznegrdmf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#ygzhbvpwce .gt_row {
+#lcznegrdmf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -914,7 +972,7 @@ pointed at the true file:</p>
   overflow-x: hidden;
 }
 
-#ygzhbvpwce .gt_stub {
+#lcznegrdmf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -927,7 +985,7 @@ pointed at the true file:</p>
   padding-right: 5px;
 }
 
-#ygzhbvpwce .gt_stub_row_group {
+#lcznegrdmf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -941,15 +999,15 @@ pointed at the true file:</p>
   vertical-align: top;
 }
 
-#ygzhbvpwce .gt_row_group_first td {
+#lcznegrdmf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#ygzhbvpwce .gt_row_group_first th {
+#lcznegrdmf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#ygzhbvpwce .gt_summary_row {
+#lcznegrdmf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -959,16 +1017,16 @@ pointed at the true file:</p>
   padding-right: 5px;
 }
 
-#ygzhbvpwce .gt_first_summary_row {
+#lcznegrdmf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_first_summary_row.thick {
+#lcznegrdmf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#ygzhbvpwce .gt_last_summary_row {
+#lcznegrdmf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -978,7 +1036,7 @@ pointed at the true file:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_grand_summary_row {
+#lcznegrdmf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -988,7 +1046,7 @@ pointed at the true file:</p>
   padding-right: 5px;
 }
 
-#ygzhbvpwce .gt_first_grand_summary_row {
+#lcznegrdmf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -998,7 +1056,7 @@ pointed at the true file:</p>
   border-top-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_last_grand_summary_row_top {
+#lcznegrdmf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1008,11 +1066,11 @@ pointed at the true file:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_striped {
+#lcznegrdmf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#ygzhbvpwce .gt_table_body {
+#lcznegrdmf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1021,7 +1079,7 @@ pointed at the true file:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_footnotes {
+#lcznegrdmf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1035,7 +1093,7 @@ pointed at the true file:</p>
   border-right-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_footnote {
+#lcznegrdmf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1044,7 +1102,7 @@ pointed at the true file:</p>
   padding-right: 5px;
 }
 
-#ygzhbvpwce .gt_sourcenotes {
+#lcznegrdmf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1058,7 +1116,7 @@ pointed at the true file:</p>
   border-right-color: #D3D3D3;
 }
 
-#ygzhbvpwce .gt_sourcenote {
+#lcznegrdmf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1066,72 +1124,72 @@ pointed at the true file:</p>
   padding-right: 5px;
 }
 
-#ygzhbvpwce .gt_left {
+#lcznegrdmf .gt_left {
   text-align: left;
 }
 
-#ygzhbvpwce .gt_center {
+#lcznegrdmf .gt_center {
   text-align: center;
 }
 
-#ygzhbvpwce .gt_right {
+#lcznegrdmf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#ygzhbvpwce .gt_font_normal {
+#lcznegrdmf .gt_font_normal {
   font-weight: normal;
 }
 
-#ygzhbvpwce .gt_font_bold {
+#lcznegrdmf .gt_font_bold {
   font-weight: bold;
 }
 
-#ygzhbvpwce .gt_font_italic {
+#lcznegrdmf .gt_font_italic {
   font-style: italic;
 }
 
-#ygzhbvpwce .gt_super {
+#lcznegrdmf .gt_super {
   font-size: 65%;
 }
 
-#ygzhbvpwce .gt_footnote_marks {
+#lcznegrdmf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#ygzhbvpwce .gt_asterisk {
+#lcznegrdmf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#ygzhbvpwce .gt_indent_1 {
+#lcznegrdmf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#ygzhbvpwce .gt_indent_2 {
+#lcznegrdmf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#ygzhbvpwce .gt_indent_3 {
+#lcznegrdmf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#ygzhbvpwce .gt_indent_4 {
+#lcznegrdmf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#ygzhbvpwce .gt_indent_5 {
+#lcznegrdmf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#ygzhbvpwce .katex-display {
+#lcznegrdmf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#ygzhbvpwce div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lcznegrdmf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1223,23 +1281,23 @@ Repeating our analysis, looking for that field, we see:</p>
 ## ℹ Use `summarise(.groups = &quot;drop_last&quot;)` to silence this message.
 ## ℹ Use `summarise(.by = c(char_type, pri_type))` for per-operation grouping
 ##   (`?dplyr::dplyr_by`) instead.</code></pre>
-<div id="jcagdfioht" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#jcagdfioht table {
+<div id="gqzoggopso" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#gqzoggopso table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#jcagdfioht thead, #jcagdfioht tbody, #jcagdfioht tfoot, #jcagdfioht tr, #jcagdfioht td, #jcagdfioht th {
+#gqzoggopso thead, #gqzoggopso tbody, #gqzoggopso tfoot, #gqzoggopso tr, #gqzoggopso td, #gqzoggopso th {
   border-style: none;
 }
 
-#jcagdfioht p {
+#gqzoggopso p {
   margin: 0;
   padding: 0;
 }
 
-#jcagdfioht .gt_table {
+#gqzoggopso .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1265,12 +1323,12 @@ Repeating our analysis, looking for that field, we see:</p>
   border-left-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_caption {
+#gqzoggopso .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#jcagdfioht .gt_title {
+#gqzoggopso .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1282,7 +1340,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-bottom-width: 0;
 }
 
-#jcagdfioht .gt_subtitle {
+#gqzoggopso .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1294,7 +1352,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-top-width: 0;
 }
 
-#jcagdfioht .gt_heading {
+#gqzoggopso .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1306,13 +1364,13 @@ Repeating our analysis, looking for that field, we see:</p>
   border-right-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_bottom_border {
+#gqzoggopso .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_col_headings {
+#gqzoggopso .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1327,7 +1385,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-right-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_col_heading {
+#gqzoggopso .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1347,7 +1405,7 @@ Repeating our analysis, looking for that field, we see:</p>
   overflow-x: hidden;
 }
 
-#jcagdfioht .gt_column_spanner_outer {
+#gqzoggopso .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1359,15 +1417,15 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 4px;
 }
 
-#jcagdfioht .gt_column_spanner_outer:first-child {
+#gqzoggopso .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#jcagdfioht .gt_column_spanner_outer:last-child {
+#gqzoggopso .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#jcagdfioht .gt_column_spanner {
+#gqzoggopso .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1379,11 +1437,11 @@ Repeating our analysis, looking for that field, we see:</p>
   width: 100%;
 }
 
-#jcagdfioht .gt_spanner_row {
+#gqzoggopso .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#jcagdfioht .gt_group_heading {
+#gqzoggopso .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1409,7 +1467,7 @@ Repeating our analysis, looking for that field, we see:</p>
   text-align: left;
 }
 
-#jcagdfioht .gt_empty_group_heading {
+#gqzoggopso .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1424,15 +1482,15 @@ Repeating our analysis, looking for that field, we see:</p>
   vertical-align: middle;
 }
 
-#jcagdfioht .gt_from_md > :first-child {
+#gqzoggopso .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#jcagdfioht .gt_from_md > :last-child {
+#gqzoggopso .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#jcagdfioht .gt_row {
+#gqzoggopso .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1451,7 +1509,7 @@ Repeating our analysis, looking for that field, we see:</p>
   overflow-x: hidden;
 }
 
-#jcagdfioht .gt_stub {
+#gqzoggopso .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1464,7 +1522,7 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 5px;
 }
 
-#jcagdfioht .gt_stub_row_group {
+#gqzoggopso .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1478,15 +1536,15 @@ Repeating our analysis, looking for that field, we see:</p>
   vertical-align: top;
 }
 
-#jcagdfioht .gt_row_group_first td {
+#gqzoggopso .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#jcagdfioht .gt_row_group_first th {
+#gqzoggopso .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#jcagdfioht .gt_summary_row {
+#gqzoggopso .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1496,16 +1554,16 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 5px;
 }
 
-#jcagdfioht .gt_first_summary_row {
+#gqzoggopso .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_first_summary_row.thick {
+#gqzoggopso .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#jcagdfioht .gt_last_summary_row {
+#gqzoggopso .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1515,7 +1573,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_grand_summary_row {
+#gqzoggopso .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1525,7 +1583,7 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 5px;
 }
 
-#jcagdfioht .gt_first_grand_summary_row {
+#gqzoggopso .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1535,7 +1593,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-top-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_last_grand_summary_row_top {
+#gqzoggopso .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1545,11 +1603,11 @@ Repeating our analysis, looking for that field, we see:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_striped {
+#gqzoggopso .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#jcagdfioht .gt_table_body {
+#gqzoggopso .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1558,7 +1616,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-bottom-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_footnotes {
+#gqzoggopso .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1572,7 +1630,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-right-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_footnote {
+#gqzoggopso .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1581,7 +1639,7 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 5px;
 }
 
-#jcagdfioht .gt_sourcenotes {
+#gqzoggopso .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1595,7 +1653,7 @@ Repeating our analysis, looking for that field, we see:</p>
   border-right-color: #D3D3D3;
 }
 
-#jcagdfioht .gt_sourcenote {
+#gqzoggopso .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1603,72 +1661,72 @@ Repeating our analysis, looking for that field, we see:</p>
   padding-right: 5px;
 }
 
-#jcagdfioht .gt_left {
+#gqzoggopso .gt_left {
   text-align: left;
 }
 
-#jcagdfioht .gt_center {
+#gqzoggopso .gt_center {
   text-align: center;
 }
 
-#jcagdfioht .gt_right {
+#gqzoggopso .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#jcagdfioht .gt_font_normal {
+#gqzoggopso .gt_font_normal {
   font-weight: normal;
 }
 
-#jcagdfioht .gt_font_bold {
+#gqzoggopso .gt_font_bold {
   font-weight: bold;
 }
 
-#jcagdfioht .gt_font_italic {
+#gqzoggopso .gt_font_italic {
   font-style: italic;
 }
 
-#jcagdfioht .gt_super {
+#gqzoggopso .gt_super {
   font-size: 65%;
 }
 
-#jcagdfioht .gt_footnote_marks {
+#gqzoggopso .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#jcagdfioht .gt_asterisk {
+#gqzoggopso .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#jcagdfioht .gt_indent_1 {
+#gqzoggopso .gt_indent_1 {
   text-indent: 5px;
 }
 
-#jcagdfioht .gt_indent_2 {
+#gqzoggopso .gt_indent_2 {
   text-indent: 10px;
 }
 
-#jcagdfioht .gt_indent_3 {
+#gqzoggopso .gt_indent_3 {
   text-indent: 15px;
 }
 
-#jcagdfioht .gt_indent_4 {
+#gqzoggopso .gt_indent_4 {
   text-indent: 20px;
 }
 
-#jcagdfioht .gt_indent_5 {
+#gqzoggopso .gt_indent_5 {
   text-indent: 25px;
 }
 
-#jcagdfioht .katex-display {
+#gqzoggopso .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#jcagdfioht div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#gqzoggopso div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1742,23 +1800,23 @@ it’s because I was mistaken about the denominator.</p>
   mutate(Comp.prop=Computer/sum(Computer), Person.prop=Person/sum(Person)) %&gt;% arrange(-Person.prop, -Comp.prop) %&gt;% 
   select(type,Person=Person.prop, Computer=Comp.prop) %&gt;% 
   gt</code></pre>
-<div id="pgdclxwmbz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#pgdclxwmbz table {
+<div id="snniynlyys" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#snniynlyys table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pgdclxwmbz thead, #pgdclxwmbz tbody, #pgdclxwmbz tfoot, #pgdclxwmbz tr, #pgdclxwmbz td, #pgdclxwmbz th {
+#snniynlyys thead, #snniynlyys tbody, #snniynlyys tfoot, #snniynlyys tr, #snniynlyys td, #snniynlyys th {
   border-style: none;
 }
 
-#pgdclxwmbz p {
+#snniynlyys p {
   margin: 0;
   padding: 0;
 }
 
-#pgdclxwmbz .gt_table {
+#snniynlyys .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1784,12 +1842,12 @@ it’s because I was mistaken about the denominator.</p>
   border-left-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_caption {
+#snniynlyys .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pgdclxwmbz .gt_title {
+#snniynlyys .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1801,7 +1859,7 @@ it’s because I was mistaken about the denominator.</p>
   border-bottom-width: 0;
 }
 
-#pgdclxwmbz .gt_subtitle {
+#snniynlyys .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1813,7 +1871,7 @@ it’s because I was mistaken about the denominator.</p>
   border-top-width: 0;
 }
 
-#pgdclxwmbz .gt_heading {
+#snniynlyys .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1825,13 +1883,13 @@ it’s because I was mistaken about the denominator.</p>
   border-right-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_bottom_border {
+#snniynlyys .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_col_headings {
+#snniynlyys .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1846,7 +1904,7 @@ it’s because I was mistaken about the denominator.</p>
   border-right-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_col_heading {
+#snniynlyys .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1866,7 +1924,7 @@ it’s because I was mistaken about the denominator.</p>
   overflow-x: hidden;
 }
 
-#pgdclxwmbz .gt_column_spanner_outer {
+#snniynlyys .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1878,15 +1936,15 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 4px;
 }
 
-#pgdclxwmbz .gt_column_spanner_outer:first-child {
+#snniynlyys .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pgdclxwmbz .gt_column_spanner_outer:last-child {
+#snniynlyys .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pgdclxwmbz .gt_column_spanner {
+#snniynlyys .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1898,11 +1956,11 @@ it’s because I was mistaken about the denominator.</p>
   width: 100%;
 }
 
-#pgdclxwmbz .gt_spanner_row {
+#snniynlyys .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pgdclxwmbz .gt_group_heading {
+#snniynlyys .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1928,7 +1986,7 @@ it’s because I was mistaken about the denominator.</p>
   text-align: left;
 }
 
-#pgdclxwmbz .gt_empty_group_heading {
+#snniynlyys .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1943,15 +2001,15 @@ it’s because I was mistaken about the denominator.</p>
   vertical-align: middle;
 }
 
-#pgdclxwmbz .gt_from_md > :first-child {
+#snniynlyys .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pgdclxwmbz .gt_from_md > :last-child {
+#snniynlyys .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pgdclxwmbz .gt_row {
+#snniynlyys .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1970,7 +2028,7 @@ it’s because I was mistaken about the denominator.</p>
   overflow-x: hidden;
 }
 
-#pgdclxwmbz .gt_stub {
+#snniynlyys .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1983,7 +2041,7 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 5px;
 }
 
-#pgdclxwmbz .gt_stub_row_group {
+#snniynlyys .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1997,15 +2055,15 @@ it’s because I was mistaken about the denominator.</p>
   vertical-align: top;
 }
 
-#pgdclxwmbz .gt_row_group_first td {
+#snniynlyys .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pgdclxwmbz .gt_row_group_first th {
+#snniynlyys .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pgdclxwmbz .gt_summary_row {
+#snniynlyys .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2015,16 +2073,16 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 5px;
 }
 
-#pgdclxwmbz .gt_first_summary_row {
+#snniynlyys .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_first_summary_row.thick {
+#snniynlyys .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pgdclxwmbz .gt_last_summary_row {
+#snniynlyys .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2034,7 +2092,7 @@ it’s because I was mistaken about the denominator.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_grand_summary_row {
+#snniynlyys .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -2044,7 +2102,7 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 5px;
 }
 
-#pgdclxwmbz .gt_first_grand_summary_row {
+#snniynlyys .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2054,7 +2112,7 @@ it’s because I was mistaken about the denominator.</p>
   border-top-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_last_grand_summary_row_top {
+#snniynlyys .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -2064,11 +2122,11 @@ it’s because I was mistaken about the denominator.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_striped {
+#snniynlyys .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#pgdclxwmbz .gt_table_body {
+#snniynlyys .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -2077,7 +2135,7 @@ it’s because I was mistaken about the denominator.</p>
   border-bottom-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_footnotes {
+#snniynlyys .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2091,7 +2149,7 @@ it’s because I was mistaken about the denominator.</p>
   border-right-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_footnote {
+#snniynlyys .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -2100,7 +2158,7 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 5px;
 }
 
-#pgdclxwmbz .gt_sourcenotes {
+#snniynlyys .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -2114,7 +2172,7 @@ it’s because I was mistaken about the denominator.</p>
   border-right-color: #D3D3D3;
 }
 
-#pgdclxwmbz .gt_sourcenote {
+#snniynlyys .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -2122,72 +2180,72 @@ it’s because I was mistaken about the denominator.</p>
   padding-right: 5px;
 }
 
-#pgdclxwmbz .gt_left {
+#snniynlyys .gt_left {
   text-align: left;
 }
 
-#pgdclxwmbz .gt_center {
+#snniynlyys .gt_center {
   text-align: center;
 }
 
-#pgdclxwmbz .gt_right {
+#snniynlyys .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pgdclxwmbz .gt_font_normal {
+#snniynlyys .gt_font_normal {
   font-weight: normal;
 }
 
-#pgdclxwmbz .gt_font_bold {
+#snniynlyys .gt_font_bold {
   font-weight: bold;
 }
 
-#pgdclxwmbz .gt_font_italic {
+#snniynlyys .gt_font_italic {
   font-style: italic;
 }
 
-#pgdclxwmbz .gt_super {
+#snniynlyys .gt_super {
   font-size: 65%;
 }
 
-#pgdclxwmbz .gt_footnote_marks {
+#snniynlyys .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pgdclxwmbz .gt_asterisk {
+#snniynlyys .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pgdclxwmbz .gt_indent_1 {
+#snniynlyys .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pgdclxwmbz .gt_indent_2 {
+#snniynlyys .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pgdclxwmbz .gt_indent_3 {
+#snniynlyys .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pgdclxwmbz .gt_indent_4 {
+#snniynlyys .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pgdclxwmbz .gt_indent_5 {
+#snniynlyys .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pgdclxwmbz .katex-display {
+#snniynlyys .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pgdclxwmbz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#snniynlyys div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>

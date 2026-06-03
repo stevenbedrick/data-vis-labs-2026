@@ -13,6 +13,8 @@ This walkthrough will illustrate a potential workflow for reproducing Table 4 fr
 
 The associated data can be found [here](https://www.speechinteraction.org/TNG/) (and is on Posit.cloud).
 
+**Note:** There is no deliverable for this lab; follow along and experiment at your leisure!
+
 # Setup
 
 ```{r,message=FALSE,error=FALSE}
@@ -231,14 +233,40 @@ j6 <- j6 %>% select(episode.id, utterance.id, char_type, type)
 j6
 ```
 
-Note the length of some of the entries in the `type` column- utterance 363 in espisode 102 has length 3. Looking at the JSON file, we can see that this is because this utterance was assigned three types- "Wake word", "Conversation", and "Question".
-
-Because the "type" column is itself a container JSON element (a list), we actually will need to `unnest` it twice. This is the sort of thing that `jsonlite` has helpers to do, but for a simple file format like this one I personally usually just do it all by hand, so I can be sure about what's going on.
+Notice that `char_type` and `type` are list columns, with `char_type` always being of length 1 and `type` being of varying lengths. 
+In our original data, `char_type` was a `scalar`, not a list: we ended up with it as a list because of a quirk of how our raw JSON parse was processed and enframed. We can easily deal with this via `unnest`:
 
 ```{r}
-j7 <- j6 %>% unnest(char_type) %>% unnest(type) %>% unnest(type)
+j6 <- j6 %>% unnest(char_type)
+j6
+```
+
+
+Now, let's turn to the `type` column. Look at the entry for utterance 363 in espisode 102: it has a length of 3. Looking at the JSON file, we can see that this is because this utterance was assigned three types- "Wake word", "Conversation", and "Question".
+
+Because the "type" column's JSON origin was as a container element (a list), which in principle could have had entries of varying types, R has given it to us as an R list (which can have varying contents) rather than as vector (which can only have one kind of data). 
+_We_ know what is in that list, but R doesn't.
+
+As such, we have a little bit of extra work to do; we actually will need to `unnest` it _twice_:
+
+- The _first_ `unnest()` call will get it out of its "outer" R list
+- The _second_ `unnest()` call gets it out of its length-1-vector into a scalar.
+
+This is the sort of thing that `jsonlite` has helpers to do, but for a simple file format like this one I personally usually just do it all by hand, so I can be sure about what's going on.
+
+```{r}
+j7 <- j6 %>% unnest(type) %>% unnest(type)
 j7
 ```
+
+A more modern and simpler option, that works in _this specific case_ but might not _always_ work, is to use `unnest_longer`:
+
+```{r}
+j7 <- j6 %>% unnest_longer(type)
+j7
+```
+
+
 At this point, we've got a nice, tidy data frame, and we are ready to use regular methods to compute our table.
 
 # Actually Replicating an Analysis
@@ -270,7 +298,7 @@ full_j %>% enframe %>%
   unnest(utterance) %>% 
   pivot_wider(names_from=name, values_from=value) %>% 
   select(episode.id, utterance.id, char_type, type) %>% 
-  unnest(char_type) %>% unnest(type) %>% unnest(type) %>% 
+  unnest(char_type) %>% unnest_longer(type) %>% 
    group_by(char_type, type) %>% 
   summarise(n=n()) %>% 
   mutate(denom=sum(n)) %>% 
