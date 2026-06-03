@@ -1,13 +1,13 @@
 ---
-title: "Bonus \"Lab 11\": JSON"
+title: "Lab 09: JSON Walkthrough"
 author: "Steven Bedrick"
-date: "2025-06-04"
+date: "2025-06-03"
 output: html_document
 ---
 
 # Introduction
 
-This walkthrough will illustrate a potential workflow for reproducing the data from the following paper:
+This walkthrough will illustrate a potential workflow for reproducing Table 4 from the following paper:
 
 > Axtell B, Munteanu C. [Tea, Earl Grey, Hot: Designing Speech Interactions from the Imagined Ideal of Star Trek.](https://dl.acm.org/doi/abs/10.1145/3411764.3445640) In: Proceedings of the 2021 CHI Conference on Human Factors in Computing Systems. Yokohama Japan: ACM; 2021. p. 1–14.
 
@@ -31,7 +31,9 @@ library(gt)
 
 # Know your data:
 
-Check in text editor (or JSON-viewer of your choice- Firefox will work as well)
+Before we even look at the JSON itself, we should read the originating paper and get a sense of the analyses performed. Were there important variables that the authors used for stratifying the study population? Were there particular dimensions over which they computed summary statistics? Look
+
+Next, manually check the structure of the data file in the text editor of your choice (or the JSON-viewer of your choice- Firefox will work as well):
 
 
 ```json
@@ -60,13 +62,32 @@ Check in text editor (or JSON-viewer of your choice- Firefox will work as well)
 		...
 ```
 
-Outer-most part of the document is a dict; keys are episodes, values are dictionaries containing utterance IDs as keys and a dictionary as a value. Each of _these_ has the actual information about the utterance.
+What do we see?
+
+#### Top-level Structure
+
+The outer-most part of the document is a dictionary whose keys are _episodes_, and whose values are also dictionaries. Each of these represents a _single episode_. What is in these dictionaries?
+
+#### Episode-level Structure
+
+Each episode-level dictionary contains _utterance IDs_ as keys and yet another dictionary as a value. Each of these represents a _single utterance_. What is in _these_ dictionaries?
+
+#### Utterance-level structure
+
+Each utterance-level dictionary contains the actual information about the utterance. 
+This dictionary's keys refer to specific attributes of the utterance (what character was speaking, the actual line of dialogue itself, etc.).
+
+Some of these attributes are _scalar_ (character, etc.) while others are _lists_ (utterances can be of more than one type, etc.).
+
+#### Now, go back to the paper
+
+After looking over the structure, go back to your notes about the paper and see if the things you were looking for --- variables, things from figures, etc. --- appear in the document anywhere. If they don't, get ready to figure out how to recompute analytical variables!
 
 # Thinking about desired final structure:
 
-Since we want a final tally of interaction type by speaker type, we'll want something like this:
+Recall that our goal is to reproduce table 4 frmo the paper, which was a final tally of interaction type by speaker type (human vs. computer). Here's a "sketch" of a dataframe we might want to ultimately end up with:
 
-Each row should be an utterance, with columns for:
+A long dataframe, in which each row is an utterance, with columns for:
 
 1. Episode ID
 2. Utterance ID within that episode
@@ -77,7 +98,7 @@ Looking at the structure of our data, it looks like the important inner keys are
 
 # Initial loading
 
-`jsonlite::read_json()` is a good place to start; note that for _some_ JSON files, it can automatically do a fair bit of the work that we are about to do by hand. If your JSON file is relatively simple, and does not have deeply-nested objects with varying dimensions, `as_tibble()` may be able to coerce the nested list into a dataframe... but not always, and not for _this_ JSON file, because of the amount of heterogeneity in the data. 
+`jsonlite::read_json()` is a good place to start; note that for _some_ JSON files, it can automatically do a fair bit of the work that we are about to do by hand. _If_ your JSON file is relatively simple, and does not have deeply-nested objects with varying dimensions, `jsonlite::as_tibble()` may be able to coerce the nested list into a dataframe... but not always, and not for _this_ JSON file, because of the amount of heterogeneity in the data. 
 So we will be doing this "by hand".
 
 ```{r}
@@ -144,6 +165,8 @@ j2
 
 See what happened here? We started with a named list, and ended up with a dataframe where one column is the names of the list and the second column is the values. 
 
+To get a little more concrete: each row of our dataframe now corresponds to a single top-level item from our input JSON file (i.e., an _episode_), with a column (by default, named `name`) representing the item's key and a second column (by default, named `value`)  containing that item's value. In this JSON file, the keys correspond to particular episode IDs, with the matching values representing dictionaries containing utterances from that episode.
+
 Next, we're going to go one more level down, but before we do, let's rename our columns- by default, `enframe` just gives the uninformative column names "name" and "value", which (as you will see) can quickly become confusing We can do this using `rename()`, or we can override those defaults when we call `enframe`. 
 
 ```{r}
@@ -201,7 +224,7 @@ j6
 
 This is starting to look like we're getting closer to a dataframe we can work with! 
 We still have a little bit of work to do, however.
-First, let's make our lives simpler by getting rid of some of the columns we don't need:
+First, let's make our lives simpler by getting rid of some of the columns we don't need for our analysis:
 
 ```{r}
 j6 <- j6 %>% select(episode.id, utterance.id, char_type, type)
@@ -216,7 +239,11 @@ Because the "type" column is itself a container JSON element (a list), we actual
 j7 <- j6 %>% unnest(char_type) %>% unnest(type) %>% unnest(type)
 j7
 ```
-At this point, we've got a nice, tidy data frame, and we are ready to use regular methods to compute our table:
+At this point, we've got a nice, tidy data frame, and we are ready to use regular methods to compute our table.
+
+# Actually Replicating an Analysis
+
+We can use regular tidyverse methods to to compute our table:
 
 ```{r}
 j7 %>% group_by(char_type, type) %>% 
@@ -302,7 +329,7 @@ full_j %>% enframe %>%
   gt
 ```
 
-This _still_ isn't in alignment with what the paper reported, but at this point you get the idea. :-D
+This _still_ isn't in alignment with what the paper reported, but from this point, the issue becomes one of replicating an analysis rather than parsing JSON, and thus is out of scope for our lab. :-D
 
 
 
